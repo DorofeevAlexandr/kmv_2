@@ -1,0 +1,13 @@
+
+services:
+  db:
+    ports:
+      - 5432:5432
+    networks:
+      - bridge_network  
+    build: ./database/
+
+
+networks:
+  bridge_network:
+    driver: bridge
