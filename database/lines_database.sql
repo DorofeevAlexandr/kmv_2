@@ -2,8 +2,8 @@
 --counters
 CREATE TABLE IF NOT EXISTS counters (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
-    time timestamp NOT NULL
-    lengths  bigint[]
+    time timestamp NOT NULL,
+    lengths  bigint[],
     connection_counters  Boolean[]
 );
 
