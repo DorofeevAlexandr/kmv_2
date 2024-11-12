@@ -36,26 +36,52 @@ class PostgresDataLoader:
             connection.commit()
 
     def read_old_data_csv_file(self, file_name):
+        print(file_name)
         date = dt.datetime.strptime(os.path.split(file_name)[1], "Lines_data_%Y_%m_%d.csv")
         print(date)
-        with open(file_name, newline='') as f:
-            for row in csv.reader(f, delimiter=';', quotechar='"'):
-                if row[0] != 'Time - 7h':
-                    time = dt.datetime.strptime(row[0], '%H:%M')
-                    dtime = dt.timedelta(hours=time.hour,
-                                         minutes=time.minute)
-                    dtime_7_hours = dt.timedelta(hours=7)
-                    date_time = date + dtime + dtime_7_hours
-                    print(date_time)
-                    row = [x if x != '' else '0' for x in row]
-                    lengths = '{' + ','.join(row[1:]) + '}'
+        try:
+            with open(file_name, newline='') as f:
+                for row in csv.reader(f, delimiter=';', quotechar='"'):
+                    if row[0] != 'Time - 7h':
+                        # print(row)
+                        time = dt.datetime.strptime(row[0], '%H:%M')
+                        dtime = dt.timedelta(hours=time.hour,
+                                             minutes=time.minute)
+                        dtime_7_hours = dt.timedelta(hours=7)
+                        date_time = date + dtime + dtime_7_hours
+                        # print(date_time)
+                        row = [x if x != '' else '0' for x in row]
+                        lengths = '{' + ','.join(row[1:]) + '}'
+                        # print(lengths)
+                        self.add_counters_record(date_time, lengths)
+        except Exception as e:
+            print('Ошибка', file_name)
+            print(e)
 
-                    self.add_counters_record(date_time, lengths)
-                    print(row)
-                    print(lengths)
+    def get_csv_filenames(self, dir_name):
+        files = os.listdir(dir_name)
+        complete_files = []
+        for file in files:
+            # print(file)
+            path = os.path.join(dir_name, file)
+            # print(complete_path)
+            if os.path.isdir(path):
+                print(path)
+                complete_files = complete_files + self.get_csv_filenames(path)
+            else:
+                if os.path.splitext(path)[1] == '.csv':
+                    complete_files.append(path)
+        return complete_files
 
     def load_old_data(self):
-        self.read_old_data_csv_file(file_name = '/home/amd/projects/kmv_2/app/Lines_data_2021_5_24.csv')
+        csv_files = self.get_csv_filenames('/home/amd/projects/kmv_2/data_base_csv')
+        files = sorted(csv_files)
+        for file in files:
+            self.read_old_data_csv_file(file_name=file)
+
+
+
+
 
 
 POSTGRES_PASSWORD = 'secret'
