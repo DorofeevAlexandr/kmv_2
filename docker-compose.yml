@@ -7,6 +7,10 @@ services:
       - bridge_network  
     build: ./database/
 
+  app :
+    networks:
+      - bridge_network
+    build: ./app/
 
 networks:
   bridge_network:
