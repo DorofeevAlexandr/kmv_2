@@ -1,8 +1,6 @@
 import csv
 import datetime as dt
 import os
-from datetime import datetime
-
 import psycopg2
 from psycopg2 import Error
 from psycopg2.extras import DictCursor
@@ -78,11 +76,6 @@ class PostgresDataLoader:
         files = sorted(csv_files)
         for file in files:
             self.read_old_data_csv_file(file_name=file)
-
-
-
-
-
 
 POSTGRES_PASSWORD = 'secret'
 POSTGRES_USER = 'username'
