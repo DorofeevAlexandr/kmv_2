@@ -15,8 +15,13 @@ CREATE TABLE IF NOT EXISTS lines (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
     line_number INTEGER  NOT NULL unique,
     name char NOT NULL unique,
+    pseudonym char NOT NULL unique,
     port char NOT NULL,
     modbus_adr Integer NOT NULL,
+    department Integer NOT NULL,
+    number_of_display Integer NOT NULL,
+    cable_number Integer NOT NULL,
+    cable_connection_number Integer NOT NULL,
     k  Float NOT NULL,
     created_dt timestamp,
 	description text
