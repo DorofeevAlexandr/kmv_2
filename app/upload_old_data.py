@@ -74,8 +74,9 @@ class PostgresDataLoader:
     def load_old_data(self):
         csv_files = self.get_csv_filenames('/home/amd/projects/kmv_2/data_base_csv')
         files = sorted(csv_files)
-        for file in files:
+        for n, file in enumerate(files):
             self.read_old_data_csv_file(file_name=file)
+            print(f"Загружено {n} файлов из {len(files)}")
 
 POSTGRES_PASSWORD = 'secret'
 POSTGRES_USER = 'username'
