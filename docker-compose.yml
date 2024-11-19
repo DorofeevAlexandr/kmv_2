@@ -6,12 +6,20 @@ services:
     networks:
       - bridge_network  
     build: ./database/
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
 
   app :
     networks:
       - bridge_network
     build: ./app/
+    restart: unless-stopped
 
 networks:
   bridge_network:
     driver: bridge
+
+volumes:
+    static_volume: {}
+    postgres_data: {}
