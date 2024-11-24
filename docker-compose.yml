@@ -14,7 +14,9 @@ services:
     networks:
       - bridge_network
     build: ./app/
-    restart: unless-stopped
+#    restart: unless-stopped
+    volumes:
+      - data_base_csv:/var/data_base_csv
 
 networks:
   bridge_network:
@@ -23,3 +25,9 @@ networks:
 volumes:
     static_volume: {}
     postgres_data: {}
+    data_base_csv:
+      driver: local
+      driver_opts:
+        o: bind
+        type: none
+        device: ./data_base_csv
