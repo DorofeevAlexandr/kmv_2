@@ -19,6 +19,11 @@
 
     $ docker-compose exec web python manage.py migrate --noinput
 ---
+Создайте суперпользователя командой:
+
+    $ docker-compose exec web python manage.py createsuperuser 
+---
+
 
 
 
