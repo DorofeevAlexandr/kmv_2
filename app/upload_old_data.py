@@ -34,13 +34,12 @@ class PostgresDataLoader:
             connection.commit()
 
     def read_old_data_csv_file(self, file_name):
-        print(file_name)
         date = dt.datetime.strptime(os.path.split(file_name)[1], "Lines_data_%Y_%m_%d.csv")
-        print(date)
+        # print(date)
         try:
-            with open(file_name, newline='') as f:
+            with open(file_name, newline='',  errors="replace") as f:
                 for row in csv.reader(f, delimiter=';', quotechar='"'):
-                    if row[0] != 'Time - 7h':
+                    if row[0] != 'Time - 7h' and len(row) < 60:
                         # print(row)
                         time = dt.datetime.strptime(row[0], '%H:%M')
                         dtime = dt.timedelta(hours=time.hour,
@@ -52,6 +51,9 @@ class PostgresDataLoader:
                         lengths = '{' + ','.join(row[1:]) + '}'
                         # print(lengths)
                         self.add_counters_record(date_time, lengths)
+                    else:
+                        # print(row)
+                        pass
         except Exception as e:
             print('Ошибка', file_name)
             print(e)
@@ -72,19 +74,20 @@ class PostgresDataLoader:
         return complete_files
 
     def load_old_data(self):
-        csv_files = self.get_csv_filenames('/home/amd/projects/kmv_2/data_base_csv')
+        csv_files = self.get_csv_filenames('/var/data_base_csv')
         files = sorted(csv_files)
-        for file in files:
+        for n, file in enumerate(files):
             self.read_old_data_csv_file(file_name=file)
+            print(f"Загружено {n + 1} файлов из {len(files)} - {file}")
 
 POSTGRES_PASSWORD = 'secret'
 POSTGRES_USER = 'username'
 POSTGRES_DB = 'lines_database'
 
 if __name__ == '__main__':
-    sleep(5)
-    # dsl = {'dbname': POSTGRES_DB, 'user': POSTGRES_USER, 'password': POSTGRES_PASSWORD, 'host': 'db', 'port': 5432}
-    dsl = {'dbname': POSTGRES_DB, 'user': POSTGRES_USER, 'password': POSTGRES_PASSWORD, 'host': 'localhost', 'port': 5432}
+    sleep(1)
+    dsl = {'dbname': POSTGRES_DB, 'user': POSTGRES_USER, 'password': POSTGRES_PASSWORD, 'host': 'db', 'port': 5432}
+    # dsl = {'dbname': POSTGRES_DB, 'user': POSTGRES_USER, 'password': POSTGRES_PASSWORD, 'host': 'localhost', 'port': 5432}
     with psycopg2.connect(**dsl, cursor_factory=DictCursor) as connection:
         print(connection)
         pdl = PostgresDataLoader(connection)

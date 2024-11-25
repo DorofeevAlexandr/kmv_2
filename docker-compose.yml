@@ -6,12 +6,42 @@ services:
     networks:
       - bridge_network  
     build: ./database/
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  web:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/:/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    networks:
+      - bridge_network
+    depends_on:
+          - db
 
   app :
     networks:
       - bridge_network
     build: ./app/
+#    restart: unless-stopped
+    volumes:
+      - data_base_csv:/var/data_base_csv
 
 networks:
   bridge_network:
     driver: bridge
+
+volumes:
+    static_volume: {}
+    postgres_data: {}
+    data_base_csv:
+      driver: local
+      driver_opts:
+        o: bind
+        type: none
+        device: ./data_base_csv
