@@ -26,7 +26,6 @@ class PostgresDataLoader:
         return data
 
     def add_line_params_record(self, params:dict):
-
         insert_query = """ INSERT INTO lines (line_number, name, pseudonym, port, modbus_adr, department, 
                        number_of_display, cable_number, cable_connection_number, k, created_dt, description) 
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
@@ -60,7 +59,7 @@ class PostgresDataLoader:
                 params['number_of_display'] = row[6]
                 params['cable_number'] = row[7]
                 params['cable_connection_number'] = 0
-                params['k'] = row[8]
+                params['k'] = row[9]
                 params['created_dt'] = dt.datetime.now()
                 params['description'] = 'description'
                 self.add_line_params_record(params=params)
