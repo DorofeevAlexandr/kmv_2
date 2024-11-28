@@ -1,5 +1,6 @@
 import csv
 import datetime as dt
+from dotenv import load_dotenv
 import os
 import psycopg2
 from psycopg2 import Error
@@ -80,14 +81,18 @@ class PostgresDataLoader:
             self.read_old_data_csv_file(file_name=file)
             print(f"Загружено {n + 1} файлов из {len(files)} - {file}")
 
-POSTGRES_PASSWORD = 'secret'
-POSTGRES_USER = 'username'
-POSTGRES_DB = 'lines_database'
 
 if __name__ == '__main__':
     sleep(1)
-    dsl = {'dbname': POSTGRES_DB, 'user': POSTGRES_USER, 'password': POSTGRES_PASSWORD, 'host': 'db', 'port': 5432}
-    # dsl = {'dbname': POSTGRES_DB, 'user': POSTGRES_USER, 'password': POSTGRES_PASSWORD, 'host': 'localhost', 'port': 5432}
+    load_dotenv()
+    dsl = {'dbname': os.environ.get('DB_NAME'),
+           'user':  os.environ.get('DB_USER'),
+           'password': os.environ.get('DB_PASSWORD'),
+           #'host': os.environ.get('DB_HOST', 'db'),
+           # 'host': 'localhost',
+           'host': 'db',
+           'port': 5432,
+           }
     with psycopg2.connect(**dsl, cursor_factory=DictCursor) as connection:
         print(connection)
         pdl = PostgresDataLoader(connection)

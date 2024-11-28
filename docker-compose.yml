@@ -1,6 +1,10 @@
 
 services:
   db:
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - 5432:5432
     networks:
@@ -29,6 +33,8 @@ services:
       - bridge_network
     build: ./app/
 #    restart: unless-stopped
+    env_file:
+      - ./.env
     volumes:
       - data_base_csv:/var/data_base_csv
 
