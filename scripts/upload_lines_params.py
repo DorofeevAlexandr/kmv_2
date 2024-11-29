@@ -66,7 +66,6 @@ class PostgresDataLoader:
 
 
 if __name__ == '__main__':
-    sleep(5)
     load_dotenv()
     dsl = {'dbname': os.environ.get('DB_NAME'),
            'user':  os.environ.get('DB_USER'),
@@ -78,5 +77,5 @@ if __name__ == '__main__':
     with psycopg2.connect(**dsl, cursor_factory=DictCursor) as connection:
         print(connection)
         pdl = PostgresDataLoader(connection)
-        pdl.upload_line_params(file_name='/home/amd/projects/kmv_2/app/lines.csv')
+        pdl.upload_line_params(file_name='/home/amd/projects/kmv_2/scripts/lines.csv')
         print('Записей в таблице lines  = ', pdl.count_records( 'lines'))
