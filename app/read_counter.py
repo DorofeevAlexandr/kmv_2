@@ -46,7 +46,7 @@ def read_input_registers_modbus_device(port='/dev/ttyS0', slave_adr=16,
     return rr.registers
 
 
-def get_indikator_value(registers):
+def get_indicator_value(registers):
     try:
         if registers:
             w0 = registers[0]
@@ -56,11 +56,33 @@ def get_indikator_value(registers):
     except:
         return 0
 
-def get_conection(registers):
+def get_connection(registers):
     try:
         if registers:
             w7 = registers[7]
             w8 = registers[8]
+            return w7 != 0 and w8 != 0
+        return False
+    except:
+        return False
+
+def get_plc_indicator_value(registers, line_number):
+    try:
+        offset = (line_number - 1) * 6
+        if registers:
+            w0 = registers[offset + 0]
+            w1 = registers[offset + 1]
+            return w0 * 65536 + w1
+        return 0
+    except:
+        return 0
+
+def get_plc_connection(registers, line_number):
+    try:
+        offset = (line_number - 1) * 6
+        if registers:
+            w7 = registers[offset + 3]
+            w8 = registers[offset + 4]
             return w7 != 0 and w8 != 0
         return False
     except:

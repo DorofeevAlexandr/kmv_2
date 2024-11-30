@@ -2,7 +2,8 @@ from datetime import datetime
 
 from sqlalchemy.sql.functions import session_user
 
-from read_counter import read_input_registers_modbus_device, get_conection, get_indikator_value
+from read_counter import (read_input_registers_modbus_device, get_connection, get_indicator_value,
+                          get_plc_indicator_value, get_plc_connection)
 import time as _time
 
 from models import Lines, LinesCurrentParams
@@ -29,7 +30,7 @@ def read_serial_port_counters(session, lines_params):
         elif line['port'] == 'ttyS1':
             port = '/dev/ttyS1'
         else:
-            port = None
+            continue
 
         if COUNTER_SIMULATION:
             ind_value = datetime.now().second
@@ -37,14 +38,32 @@ def read_serial_port_counters(session, lines_params):
         else:
             registers = read_input_registers_modbus_device(port=port,
                                                            slave_adr=line['modbus_adr'])
-            ind_value = get_indikator_value(registers)
-            conected = get_conection(registers)
+            ind_value = get_indicator_value(registers)
+            conected = get_connection(registers)
 
         length = ind_value * line['k'] 
         update_line_in_base(session, line,
                             ind_value=ind_value,
                             conected=conected,
                             length=length)
+
+def read_plc_counters(session, lines_params, registers):
+    for line in lines_params:
+        if line['port'] == 'SL1' or line['port'] == 'SL2':
+            if COUNTER_SIMULATION:
+                ind_value = datetime.now().second
+                conected = False
+            else:
+                ind_value = get_plc_indicator_value(registers, line['line_number'])
+                conected = get_plc_connection(registers, line['line_number'])
+
+            length = ind_value * line['k']
+            update_line_in_base(session, line,
+                                ind_value=ind_value,
+                                conected=conected,
+                                length=length)
+        else:
+            continue
 
 def read_lines_params_in_base(session):
     params = []
@@ -89,7 +108,7 @@ def update_line_in_base(session, line_params, ind_value=0, conected=False, lengt
         speed_line = 0
     line = session.query(LinesCurrentParams).filter(LinesCurrentParams.line_number==line_number).first()
     if line:
-        line.indikator_value = ind_value
+        line.indicator_value = ind_value
         line.no_connection_counter = not conected
         line.length = length
         line.speed_line = speed_line
