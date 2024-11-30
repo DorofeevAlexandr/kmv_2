@@ -1,10 +1,23 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey, Float, DATETIME, Boolean
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
 
 
 class Base(DeclarativeBase):
     pass
+
+class Counters(Base):
+    __tablename__ = 'counters'
+
+    id = Column(Integer, primary_key=True)
+    time = Column(DATETIME, nullable=True)
+    lengths = Column(ARRAY(Integer), nullable=True)
+    connection_counters = Column(ARRAY(Boolean), nullable=True)
+
+    def __repr__(self):
+        return f'{self.id} time = {self.time}, {self.connection_counters} '
+
 
 class Lines(Base):
     __tablename__ = 'lines'

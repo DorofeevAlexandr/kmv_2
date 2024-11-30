@@ -1,13 +1,8 @@
 from datetime import datetime
 
-from sqlalchemy.sql.functions import session_user
-
+from models import Lines, LinesCurrentParams, Counters
 from read_counter import (read_input_registers_modbus_device, get_connection, get_indicator_value,
                           get_plc_indicator_value, get_plc_connection)
-import time as _time
-
-from models import Lines, LinesCurrentParams
-
 
 
 COUNTER_SIMULATION = True
@@ -86,6 +81,17 @@ def read_lines_params_in_base(session):
             })
     return params
 
+def read_current_lengths_in_base(session):
+    return (session.query(LinesCurrentParams.length).
+            order_by(LinesCurrentParams.line_number).all())
+
+def read_current_connections_in_base(session):
+    return (session.query(LinesCurrentParams.no_connection_counter).
+            order_by(LinesCurrentParams.line_number).all())
+
+def read_lines_name(session):
+    return session.query(Lines.name).order_by(Lines.line_number).all()
+
 def read_lines_current_params_in_base(session, line_number):
     line = session.query(LinesCurrentParams).filter(LinesCurrentParams.line_number==line_number).first()
     if line:
@@ -118,4 +124,10 @@ def update_line_in_base(session, line_params, ind_value=0, conected=False, lengt
     session.add(line)
     session.commit()
 
-
+def add_in_base_counters(session, current_lengths: list, current_connections: list):
+    counters = Counters(time=datetime.now(),
+                        lengths=[int(c_l[0] * 1000) for c_l in current_lengths],
+                        connection_counters=[c_c[0] for c_c in current_connections]
+                        )
+    session.add(counters)
+    session.commit()
