@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 import time
 
 import control_plc
-from wear_lines import read_data_in_base
+from wear_lines import read_lines_params_in_base, read_lines_current_params_in_base, read_serial_port_counters
 
 
 def postgres_engine():
@@ -26,15 +26,18 @@ def postgres_engine():
 
 def read_counters_save_postgres(p_engine):
     with Session(autoflush=False, bind=p_engine) as db:
+
+        registers = control_plc.get_registers()
+        print(registers)
+        control_plc.write_register(reg_adr=1, new_value=123)
+        lines_params = read_lines_params_in_base(session=db)
+        print(lines_params)
+        read_serial_port_counters(db, lines_params)
+        # db.add_all([vacancie])
+        #db.add(vacancie)
+        # db.commit()
         try:
-            registers = control_plc.get_registers()
-            print(registers)
-            control_plc.write_register(reg_adr=1, new_value=123)
-            line_params = read_data_in_base(session=db)
-            print(line_params)
-            # db.add_all([vacancie])
-            #db.add(vacancie)
-            # db.commit()
+            pass
         except Exception as e:
             print('error', e)
 
@@ -42,7 +45,7 @@ def read_counters_save_postgres(p_engine):
 
 
 if __name__ == '__main__':
-    time.sleep(5)
+    time.sleep(1)
     engine = postgres_engine()
     while True:
         read_counters_save_postgres(p_engine=engine)
