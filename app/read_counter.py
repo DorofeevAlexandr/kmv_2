@@ -88,6 +88,14 @@ def get_plc_connection(registers, line_number):
     except:
         return False
 
+def get_plc_diskret_input_counters(registers, line_number):
+    try:
+        offset = (line_number - 1) * 6
+        if registers:
+            return registers[offset + 5] != 0
+    except:
+        return False
+
 def run_sync_client(host=None, port=None):
     """Run sync client."""
 

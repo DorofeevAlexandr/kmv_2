@@ -2,7 +2,7 @@ from datetime import datetime
 
 from models import Lines, LinesCurrentParams, Counters
 from read_counter import (read_input_registers_modbus_device, get_connection, get_indicator_value,
-                          get_plc_indicator_value, get_plc_connection)
+                          get_plc_indicator_value, get_plc_connection, get_plc_diskret_input_counters)
 
 
 COUNTER_SIMULATION = True
@@ -48,9 +48,15 @@ def read_plc_counters(session, lines_params, registers):
             if COUNTER_SIMULATION:
                 ind_value = datetime.now().second
                 conected = False
+                if line['line_number'] == 57:
+                    ind_value = 1
             else:
                 ind_value = get_plc_indicator_value(registers, line['line_number'])
                 conected = get_plc_connection(registers, line['line_number'])
+                # Исключение для вальцов
+                if line['line_number'] == 57:
+                    if get_plc_diskret_input_counters:
+                        ind_value = 1
 
             length = ind_value * line['k']
             update_line_in_base(session, line,
@@ -112,6 +118,11 @@ def update_line_in_base(session, line_params, ind_value=0, conected=False, lengt
         speed_line = get_speed(current_params['updated_dt'], length, current_params['length'])
     else:
         speed_line = 0
+
+    # # Исключение для вальцов
+    if line_number == 57 and ind_value == 1:
+        length = current_params['length'] + length
+
     line = session.query(LinesCurrentParams).filter(LinesCurrentParams.line_number==line_number).first()
     if line:
         line.indicator_value = ind_value

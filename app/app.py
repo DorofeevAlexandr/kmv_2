@@ -42,7 +42,7 @@ def read_counters_save_current_params(p_engine):
         except Exception as e:
             print('error', e)
 
-def read_and_save_current_params(p_engine):
+def read_current_params_save_in_base(p_engine):
     with Session(autoflush=False, bind=p_engine) as db:
         current_lengths = read_current_lengths_in_base(db)
         print(current_lengths)
@@ -65,12 +65,12 @@ if __name__ == '__main__':
     while True:
         time.sleep(1)
 
-        if dt.datetime.now() - dt_last_save_lengths >= dt.timedelta(seconds=20):
+        if dt.datetime.now() - dt_last_save_lengths >= dt.timedelta(seconds=60):
             dt_last_save_lengths = dt.datetime.now()
             print('dt_last_save_lengths', dt_last_save_lengths)
-            read_and_save_current_params(p_engine=engine)
+            read_current_params_save_in_base(p_engine=engine)
 
-        if dt.datetime.now() - dt_last_save_current_params >= dt.timedelta(seconds=120):
+        if dt.datetime.now() - dt_last_save_current_params >= dt.timedelta(seconds=12):
             read_counters_save_current_params(p_engine=engine)
             dt_last_save_current_params = dt.datetime.now()
             print('read_counters_save_current_params', dt_last_save_current_params)
