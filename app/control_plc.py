@@ -11,7 +11,7 @@ PLC_PORT = 502
 
 # set global
 regs = {key: 0 for key in range(0, 700)}
-print(regs)
+# print(regs)
 
 stack_of_writable_register = []
 
