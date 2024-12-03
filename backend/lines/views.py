@@ -2,11 +2,29 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.template.loader import render_to_string
+from .forms import ReadDataCounters
 
-def index(request): # HttpRequest
-    # t = render_to_string('women/index.html')
-    # return HttpResponse(t)
-    return render(request, 'lines/index.html')
+menu = [{'title': "О сайте", 'url_name': 'about'},
+        {'title': "Цех №1", 'url_name': 'index'},
+        {'title': "Цех №2", 'url_name': 'index'},
+        {'title': "Цех №3", 'url_name': 'index'}
+]
+
+
+def index(request):
+    if request.method == 'POST':
+        form = ReadDataCounters(request.POST, request.FILES)
+        if form.is_valid():
+            print(form.cleaned_data)
+    else:
+        form = ReadDataCounters()
+
+    data = {
+        'title': 'КМВ',
+        #'menu': menu,
+        'form': form,
+    }
+    return render(request, 'lines/index.html', context=data)
 
 
 def about(request):

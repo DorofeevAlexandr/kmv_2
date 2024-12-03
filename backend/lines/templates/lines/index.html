@@ -1,9 +1,32 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>Главная страница</title>
-</head>
-<body>
-<h1>Главная страница</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<ul class="list-articles">
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><button type="submit">Обновить</button></p>
+    </form>
+
+    <table width="100%" border="1">
+<!--        <tr><th>Name</th><th>Charn</th></tr> &lt;!&ndash;ряд с ячейками заголовков&ndash;&gt;-->
+        <tr>
+            <td width="30%" >Name
+                <table width="100%" border="1">
+                    <tr><th>Name</th><th>1 Смена</th><th>2 Смена</th><th>Сутки</th></tr>
+                    <tr><th>Макс. скорость, м/мин</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>
+                    <tr><th>Средн. скорость, м/мин</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>
+                    <tr><th>Изготовленно, км</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>
+                    <tr><th>Количество остановок</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>
+<!--                    <tr><th>КМВ</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>-->
+                </table>
+            </td>
+            <td width="70%" >Charn</td>
+        </tr> <!--ряд с ячейками тела таблицы-->
+    </table>
+
+
+</ul>
+
+{% endblock %}
