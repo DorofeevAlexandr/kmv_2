@@ -1,12 +1,16 @@
 
 services:
   db:
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - 5432:5432
     networks:
       - bridge_network  
     build: ./database/
-    restart: unless-stopped
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
@@ -23,14 +27,32 @@ services:
       - bridge_network
     depends_on:
           - db
+    restart: always
 
   app :
     networks:
       - bridge_network
     build: ./app/
-#    restart: unless-stopped
+    restart: always
+    env_file:
+      - ./.env
     volumes:
       - data_base_csv:/var/data_base_csv
+
+  ftp:
+    image: stilliard/pure-ftpd
+    container_name: ftp
+    ports:
+      - 21:21
+    volumes:
+      - data_base_csv:/sdo/
+    env_file:
+      - ./.env
+    environment:
+      - PUBLICHOST=${FTP_PUBLICHOST}
+      - FTP_USER_NAME=${FTP_USER_NAME}
+      - FTP_USER_PASS=${FTP_USER_PASS}
+
 
 networks:
   bridge_network:

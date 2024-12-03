@@ -1,5 +1,6 @@
 import csv
 import datetime as dt
+from dotenv import load_dotenv
 import os
 import psycopg2
 from psycopg2 import Error
@@ -25,7 +26,6 @@ class PostgresDataLoader:
         return data
 
     def add_line_params_record(self, params:dict):
-
         insert_query = """ INSERT INTO lines (line_number, name, pseudonym, port, modbus_adr, department, 
                        number_of_display, cable_number, cable_connection_number, k, created_dt, description) 
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
@@ -59,22 +59,23 @@ class PostgresDataLoader:
                 params['number_of_display'] = row[6]
                 params['cable_number'] = row[7]
                 params['cable_connection_number'] = 0
-                params['k'] = row[8]
+                params['k'] = row[9]
                 params['created_dt'] = dt.datetime.now()
                 params['description'] = 'description'
                 self.add_line_params_record(params=params)
 
 
-POSTGRES_PASSWORD = 'secret'
-POSTGRES_USER = 'username'
-POSTGRES_DB = 'lines_database'
-
 if __name__ == '__main__':
-    sleep(5)
-    # dsl = {'dbname': POSTGRES_DB, 'user': POSTGRES_USER, 'password': POSTGRES_PASSWORD, 'host': 'db', 'port': 5432}
-    dsl = {'dbname': POSTGRES_DB, 'user': POSTGRES_USER, 'password': POSTGRES_PASSWORD, 'host': 'localhost', 'port': 5432}
+    load_dotenv()
+    dsl = {'dbname': os.environ.get('DB_NAME'),
+           'user':  os.environ.get('DB_USER'),
+           'password': os.environ.get('DB_PASSWORD'),
+           # 'host': os.environ.get('DB_HOST', 'db'),
+           'host': 'localhost',
+           'port': os.environ.get('DB_PORT', 5432),
+           }
     with psycopg2.connect(**dsl, cursor_factory=DictCursor) as connection:
         print(connection)
         pdl = PostgresDataLoader(connection)
-        pdl.upload_line_params(file_name='/home/amd/projects/kmv_2/app/lines.csv')
-        #print('Записей в таблице counters  = ', pdl.count_records( 'lines'))
+        pdl.upload_line_params(file_name='/home/amd/projects/kmv_2/scripts/lines.csv')
+        print('Записей в таблице lines  = ', pdl.count_records( 'lines'))

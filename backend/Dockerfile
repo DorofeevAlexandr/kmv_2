@@ -1,6 +1,6 @@
 FROM python:3.13-alpine
 # set work directory
-WORKDIR /app
+WORKDIR /usr/src/app
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
