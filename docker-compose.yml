@@ -10,7 +10,7 @@ services:
     networks:
       - bridge_network  
     build: ./database/
-    restart: unless-stopped
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
@@ -27,12 +27,13 @@ services:
       - bridge_network
     depends_on:
           - db
+    restart: always
 
   app :
     networks:
       - bridge_network
     build: ./app/
-#    restart: unless-stopped
+    restart: always
     env_file:
       - ./.env
     volumes:
