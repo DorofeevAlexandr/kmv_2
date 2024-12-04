@@ -7,6 +7,9 @@ from django.db import models
 
 from .models import Counters
 
+
+COUNT_LINES = 70
+
 class ReadDataCounters(forms.Form):
     day = forms.DateField(initial=dt.date.today)
     # department = forms.CharField(max_length=255)
@@ -33,7 +36,7 @@ def get_counters_values_from_base(date: dt.date):
 
 
 def get_speed_lines(length_in_minute):
-    speed_lines = [[[] for _ in range(1441)] for _ in range(100)]
+    speed_lines = [[[] for _ in range(1441)] for _ in range(COUNT_LINES)]
 
     for n_minute in range(1, 1441):
         length_lines = length_in_minute[n_minute]
@@ -52,4 +55,70 @@ def get_speed_lines(length_in_minute):
 
     return speed_lines
 
+def num_smena(minute):
+    hour = minute // 60
+    if 8 <= hour < 20:
+        return 1
+    else:
+        return 2
 
+
+def get_lines_statistic(speed_lines):
+    lines_statistic = []
+
+    for num_line in range(COUNT_LINES):
+        line_runing = True
+        line_statistic = {
+            'count_minute_line_run': 0,
+            'count_minute_line_run_1': 0,
+            'count_minute_line_run_2': 0,
+
+            'max_value': 0,
+            'max_value_1': 0,
+            'max_value_2': 0,
+
+            'made_kabel': 0,
+            'made_kabel_1': 0,
+            'made_kabel_2': 0,
+
+            'stop_count': 0,
+            'stop_count_1': 0,
+            'stop_count_2': 0,
+        }
+
+        for minute in range(1438):
+            metr_in_minute = speed_lines[num_line, minute]
+            smena = num_smena(minute)
+
+            if metr_in_minute > 0.2:
+                line_runing = True
+                line_statistic['count_minute_line_run'] += 1
+                if smena == 1:
+                    line_statistic['count_minute_line_run_1'] += 1
+                if smena == 2:
+                    line_statistic['count_minute_line_run_2'] += + 1
+            else:
+                if line_runing:
+                    line_statistic['stop_count'] += 1
+                    if smena == 1:
+                        line_statistic['stop_count_1'] += 1
+                    if smena == 2:
+                        line_statistic['stop_count_2'] += 1
+                    line_runing = False
+
+
+            line_statistic['max_value'] = max(line_statistic['max_value'], metr_in_minute)
+            if smena == 1:
+                line_statistic['max_value_1'] = max(line_statistic['max_value_1'], metr_in_minute)
+            if smena == 2:
+                line_statistic['max_value_2'] = max(line_statistic['max_value_2'], metr_in_minute)
+
+            line_statistic['made_kabel'] += metr_in_minute
+            if smena == 1:
+                line_statistic['made_kabel_1'] += metr_in_minute
+            if smena == 2:
+                line_statistic['made_kabel_2'] += metr_in_minute
+
+        lines_statistic.append(line_statistic)
+
+    return lines_statistic
