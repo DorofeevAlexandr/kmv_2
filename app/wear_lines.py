@@ -5,7 +5,7 @@ from read_counter import (read_input_registers_modbus_device, get_connection, ge
                           get_plc_indicator_value, get_plc_connection, get_plc_diskret_input_counters)
 
 
-COUNTER_SIMULATION = True
+COUNTER_SIMULATION = False
 
 def get_speed(dt_old, length, old_length):
     if dt_old is None:

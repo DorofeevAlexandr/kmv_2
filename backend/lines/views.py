@@ -41,8 +41,6 @@ def index(request):
             out_lines.append({**line,
                               'statistic': lines_statistic[n],
                               'speed': speed_lines[n]} )
-        print(out_lines)
-        print('========================')
     data = {
         'title': 'КМВ',
         #'menu': menu,
