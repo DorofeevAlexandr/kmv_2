@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS lines (
 CREATE TABLE IF NOT EXISTS lines_current_params (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
     line_number INTEGER  NOT NULL unique,
-    no_connection_counter Boolean,
+    connection_counter Boolean,
     indicator_value bigint,
     length Float,
     speed_line Float,

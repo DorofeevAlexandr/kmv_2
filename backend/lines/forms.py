@@ -25,7 +25,6 @@ def get_lines_from_base():
                             'department': l.department,
                             'number_of_display': l.number_of_display,
                           })
-        print(l)
     return  out_lines
 
 def get_counters_values_from_base(date: dt.date):
@@ -65,7 +64,6 @@ def get_speed_lines(length_in_minute):
     # for line in speed_lines:
     #     print('--------------------')
     #     print(line)
-    print(speed_lines[1][1])
     return speed_lines
 
 def num_smena(minute):
