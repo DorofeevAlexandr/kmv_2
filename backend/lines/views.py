@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.template.loader import render_to_string
-from .forms import ReadDataCounters, get_counters_values_from_base
+from .forms import ReadDataCounters, get_counters_values_from_base, get_speed_lines
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Цех №1", 'url_name': 'index'},
@@ -19,6 +19,7 @@ def index(request):
             print(select_date)
             if select_date:
                 counters_values = get_counters_values_from_base(select_date)
+                speed_lines = get_speed_lines(counters_values)
 
     else:
         form = ReadDataCounters()
