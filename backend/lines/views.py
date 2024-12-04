@@ -12,6 +12,8 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 
 
 def index(request):
+    speed_lines = []
+    lines_statistic = []
     if request.method == 'POST':
         form = ReadDataCounters(request.POST, request.FILES)
         if form.is_valid():
@@ -29,6 +31,8 @@ def index(request):
         'title': 'КМВ',
         #'menu': menu,
         'form': form,
+        'speed_lines': speed_lines,
+        'lines_statistic': lines_statistic
     }
     return render(request, 'lines/index.html', context=data)
 
