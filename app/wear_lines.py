@@ -104,7 +104,7 @@ def read_lines_current_params_in_base(session, line_number):
         params = {
             'id' : line.id,
             'line_number' : line.line_number,
-            'connection_counter' : line.no_connection_counter,
+            'connection_counter' : line.connection_counter,
             'indicator_value' : line.indicator_value,
             'length' : line.length,
             'speed_line' : line.speed_line,
