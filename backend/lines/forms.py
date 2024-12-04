@@ -36,7 +36,7 @@ def get_counters_values_from_base(date: dt.date):
 
 
 def get_speed_lines(length_in_minute):
-    speed_lines = [[[] for _ in range(1441)] for _ in range(COUNT_LINES)]
+    speed_lines = [[0 for _ in range(1441)] for _ in range(COUNT_LINES)]
 
     for n_minute in range(1, 1441):
         length_lines = length_in_minute[n_minute]
@@ -52,7 +52,7 @@ def get_speed_lines(length_in_minute):
     # for line in speed_lines:
     #     print('--------------------')
     #     print(line)
-
+    print(speed_lines[1][1])
     return speed_lines
 
 def num_smena(minute):
@@ -87,7 +87,8 @@ def get_lines_statistic(speed_lines):
         }
 
         for minute in range(1438):
-            metr_in_minute = speed_lines[num_line, minute]
+            metr_in_minute = speed_lines[num_line][minute]
+            metr_in_minute = float(metr_in_minute)
             smena = num_smena(minute)
 
             if metr_in_minute > 0.2:

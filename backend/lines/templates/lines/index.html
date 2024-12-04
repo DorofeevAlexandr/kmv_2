@@ -10,20 +10,22 @@
     </form>
 
     <table width="100%" border="1">
-<!--        <tr><th>Name</th><th>Charn</th></tr> &lt;!&ndash;ряд с ячейками заголовков&ndash;&gt;-->
+        {% for stat in lines_statistic %}
         <tr>
             <td width="30%" >Name
                 <table width="100%" border="1">
                     <tr><th>Name</th><th>1 Смена</th><th>2 Смена</th><th>Сутки</th></tr>
-                    <tr><th>Макс. скорость, м/мин</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>
-                    <tr><th>Средн. скорость, м/мин</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>
-                    <tr><th>Изготовленно, км</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>
-                    <tr><th>Количество остановок</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>
-<!--                    <tr><th>КМВ</th><td>1 Смена</td><td>2 Смена</td><td>Сутки</td></tr>-->
+                    <tr><th>Время, мин</th><td>{{stat.max_value_1}}</td><td>{{stat.max_value_2}}</td><td>{{stat.max_value}}</td></tr>
+                    <tr><th>Макс. скорость, м/мин</th><td>{{stat.max_value_1}}</td><td>{{stat.max_value_2}}</td><td>{{stat.max_value}}</td></tr>
+<!--                    <tr><th>Средн. скорость, м/мин</th><td>{{stat.made_kabel_1}}</td><td>{{stat.made_kabel_2}}</td><td>{{stat.made_kabel_1}}</td></tr>-->
+                    <tr><th>Изготовленно, км</th><td>{{stat.made_kabel_1}}</td><td>{{stat.made_kabel_2}}</td><td>{{stat.made_kabel}}</td></tr>
+                    <tr><th>Количество остановок</th><td>{{stat.stop_count_1}}</td><td>{{stat.stop_count_2}}</td><td>{{stat.stop_count}}</td></tr>
+<!--                    <tr><th>КМВ</th><td>{{stat.}}</td><td>{{stat.}}</td><td>{{stat.}}</td></tr>-->
                 </table>
             </td>
             <td width="70%" >Charn</td>
         </tr> <!--ряд с ячейками тела таблицы-->
+        {% endfor %}
     </table>
 
 
