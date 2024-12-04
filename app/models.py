@@ -45,7 +45,7 @@ class LinesCurrentParams(Base):
 
     id = Column(Integer, primary_key=True)
     line_number = Column(Integer, unique=True)
-    no_connection_counter = Column(Boolean, nullable=True)
+    connection_counter = Column(Boolean, nullable=True)
     indicator_value = Column(BigInteger, nullable=True)
     length = Column(Float, nullable=True)
     speed_line = Column(Float, nullable=True)
@@ -53,7 +53,3 @@ class LinesCurrentParams(Base):
 
     def __repr__(self):
         return f'{self.id} length = {self.length}, no_connection_counter = {self.no_connection_counter} '
-
-
-
-

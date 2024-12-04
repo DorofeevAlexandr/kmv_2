@@ -68,7 +68,7 @@ def get_connection(registers):
 
 def get_plc_indicator_value(registers, line_number):
     try:
-        offset = (line_number - 1) * 6
+        offset = (line_number) * 12
         if registers:
             w0 = registers[offset + 0]
             w1 = registers[offset + 1]
@@ -79,10 +79,10 @@ def get_plc_indicator_value(registers, line_number):
 
 def get_plc_connection(registers, line_number):
     try:
-        offset = (line_number - 1) * 6
+        offset = (line_number) * 12
         if registers:
-            w7 = registers[offset + 3]
-            w8 = registers[offset + 4]
+            w7 = registers[offset + 2]
+            w8 = registers[offset + 3]
             return w7 != 0 and w8 != 0
         return False
     except:
@@ -90,9 +90,9 @@ def get_plc_connection(registers, line_number):
 
 def get_plc_diskret_input_counters(registers, line_number):
     try:
-        offset = (line_number - 1) * 6
+        offset = (line_number) * 12
         if registers:
-            return registers[offset + 5] != 0
+            return registers[offset + 4] != 0
     except:
         return False
 

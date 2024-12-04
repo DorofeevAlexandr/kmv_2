@@ -92,7 +92,7 @@ def read_current_lengths_in_base(session):
             order_by(LinesCurrentParams.line_number).all())
 
 def read_current_connections_in_base(session):
-    return (session.query(LinesCurrentParams.no_connection_counter).
+    return (session.query(LinesCurrentParams.connection_counter).
             order_by(LinesCurrentParams.line_number).all())
 
 def read_lines_name(session):
@@ -104,7 +104,7 @@ def read_lines_current_params_in_base(session, line_number):
         params = {
             'id' : line.id,
             'line_number' : line.line_number,
-            'no_connection_counter' : line.no_connection_counter,
+            'connection_counter' : line.no_connection_counter,
             'indicator_value' : line.indicator_value,
             'length' : line.length,
             'speed_line' : line.speed_line,
@@ -128,7 +128,7 @@ def update_line_in_base(session, line_params, ind_value=0, conected=False, lengt
     line = session.query(LinesCurrentParams).filter(LinesCurrentParams.line_number==line_number).first()
     if line:
         line.indicator_value = ind_value
-        line.no_connection_counter = not conected
+        line.connection_counter = conected
         line.length = length
         line.speed_line = speed_line
         line.updated_dt = datetime.now()
