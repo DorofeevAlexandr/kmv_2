@@ -5,7 +5,7 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.utils.deconstruct import deconstructible
 from django.db import models
 
-from .models import Counters
+from .models import Counters, Lines
 
 
 COUNT_LINES = 70
@@ -14,6 +14,19 @@ class ReadDataCounters(forms.Form):
     day = forms.DateField(initial=dt.date.today)
     # department = forms.CharField(max_length=255)
 
+def get_lines_from_base():
+    out_lines = []
+    lines = Lines.objects.order_by('department')
+    for l in lines:
+        out_lines.append({'line_number': l.line_number,
+                            'name': l.name,
+                            'pseudonym': l.pseudonym ,
+                            'port': l.port,
+                            'department': l.department,
+                            'number_of_display': l.number_of_display,
+                          })
+        print(l)
+    return  out_lines
 
 def get_counters_values_from_base(date: dt.date):
     dtime_8_hours = dt.timedelta(hours=8)
@@ -120,6 +133,8 @@ def get_lines_statistic(speed_lines):
             if smena == 2:
                 line_statistic['made_kabel_2'] += metr_in_minute
 
-        lines_statistic.append(line_statistic)
+        for key in line_statistic:
+            line_statistic[key] = f"{line_statistic[key]:5.1f}"
+        lines_statistic.append(line_statistic                               )
 
     return lines_statistic
