@@ -11,7 +11,13 @@ from .models import Counters, Lines
 COUNT_LINES = 70
 
 class ReadDataCounters(forms.Form):
-    day = forms.DateField(initial=dt.date.today)
+    day = forms.DateField(initial=dt.date.today,
+                          label="Выберите дату",
+                          required=True,
+                          widget=forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
+                          input_formats=["%Y-%m-%d"]
+                          )
+
     # department = forms.CharField(max_length=255)
 
 def get_lines_from_base():
