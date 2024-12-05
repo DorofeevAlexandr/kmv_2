@@ -5,7 +5,7 @@ from read_counter import (read_input_registers_modbus_device, get_connection, ge
                           get_plc_indicator_value, get_plc_connection, get_plc_diskret_input_counters)
 
 
-COUNTER_SIMULATION = True
+COUNTER_SIMULATION = False
 
 def get_speed(dt_old, length, old_length):
     if dt_old is None:
@@ -55,7 +55,7 @@ def read_plc_counters(session, lines_params, registers):
                 conected = get_plc_connection(registers, line['line_number'])
                 # Исключение для вальцов
                 if line['line_number'] == 57:
-                    if get_plc_diskret_input_counters:
+                    if get_plc_diskret_input_counters(registers, line['line_number']):
                         ind_value = 1
 
             length = ind_value * line['k']
@@ -92,7 +92,7 @@ def read_current_lengths_in_base(session):
             order_by(LinesCurrentParams.line_number).all())
 
 def read_current_connections_in_base(session):
-    return (session.query(LinesCurrentParams.no_connection_counter).
+    return (session.query(LinesCurrentParams.connection_counter).
             order_by(LinesCurrentParams.line_number).all())
 
 def read_lines_name(session):
@@ -104,7 +104,7 @@ def read_lines_current_params_in_base(session, line_number):
         params = {
             'id' : line.id,
             'line_number' : line.line_number,
-            'no_connection_counter' : line.no_connection_counter,
+            'connection_counter' : line.connection_counter,
             'indicator_value' : line.indicator_value,
             'length' : line.length,
             'speed_line' : line.speed_line,
@@ -118,15 +118,17 @@ def update_line_in_base(session, line_params, ind_value=0, conected=False, lengt
         speed_line = get_speed(current_params['updated_dt'], length, current_params['length'])
     else:
         speed_line = 0
-
     # # Исключение для вальцов
     if line_number == 57 and ind_value == 1:
-        length = current_params['length'] + length
+        if current_params and (current_params['length'] is not None):
+            length = current_params['length'] + length
+        else:
+            length = 0
 
     line = session.query(LinesCurrentParams).filter(LinesCurrentParams.line_number==line_number).first()
     if line:
         line.indicator_value = ind_value
-        line.no_connection_counter = not conected
+        line.connection_counter = conected
         line.length = length
         line.speed_line = speed_line
         line.updated_dt = datetime.now()

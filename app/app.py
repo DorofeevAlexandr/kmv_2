@@ -32,7 +32,6 @@ def read_counters_save_current_params(p_engine):
     with Session(autoflush=False, bind=p_engine) as db:
 
         registers = control_plc.get_registers()
-        control_plc.write_register(reg_adr=1, new_value=123)
         lines_params = read_lines_params_in_base(session=db)
         # print(lines_params)
         read_plc_counters(db, lines_params, registers)

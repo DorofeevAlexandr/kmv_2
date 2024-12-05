@@ -1,9 +1,87 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>Главная страница</title>
-</head>
-<body>
-<h1>Главная страница</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<ul class="list-articles">
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><button type="submit">Обновить</button></p>
+    </form>
+
+    <table width="100%" border="1">
+        {% for l in lines %}
+        <tr>
+            <td width="30%" >{{l.pseudonym}}
+                <table width="100%" border="1">
+                    <tr><th>{{l.Name}}</th><th>1 Смена</th><th>2 Смена</th><th>Сутки</th></tr>
+                    <tr><th>Время, мин</th><td>{{l.statistic.max_value_1}}</td><td>{{l.statistic.max_value_2}}</td><td>{{l.statistic.max_value}}</td></tr>
+                    <tr><th>Макс. скорость, м/мин</th><td>{{l.statistic.max_value_1}}</td><td>{{l.statistic.max_value_2}}</td><td>{{l.statistic.max_value}}</td></tr>
+<!--                    <tr><th>Средн. скорость, м/мин</th><td>{{l.statistic.made_kabel_1}}</td><td>{{l.statistic.made_kabel_2}}</td><td>{{l.statistic.made_kabel_1}}</td></tr>-->
+                    <tr><th>Изготовленно, км</th><td>{{l.statistic.made_kabel_1}}</td><td>{{l.statistic.made_kabel_2}}</td><td>{{l.statistic.made_kabel}}</td></tr>
+                    <tr><th>Количество остановок</th><td>{{l.statistic.stop_count_1}}</td><td>{{l.statistic.stop_count_2}}</td><td>{{l.statistic.stop_count}}</td></tr>
+<!--                    <tr><th>КМВ</th><td>{{stat.}}</td><td>{{stat.}}</td><td>{{stat.}}</td></tr>-->
+                </table>
+            </td>
+            <td width="70%" >
+
+
+                        <!-- bar chart canvas element -->
+            <canvas id="myChart" width="100%" height="100%"></canvas>
+<!--            <p id="caption">Графики температур за {{select_date}}</p>-->
+            <script>
+                // Global parameters:
+                // do not resize the chart canvas when its container does (keep at 600x400px)
+                Chart.defaults.global.responsive = false;
+
+                // define the chart data
+                var chartData = {
+                        labels : [{% for item in labels %}
+                            "{{item}}",
+                        {% endfor %}],
+                    datasets : [{
+                        label: '',
+                        fill: false,
+                        lineTension: 0.1,
+                        backgroundColor: "rgba(0,200,0,0.6)",
+                        borderColor: "rgba(0,200,0,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(0,200,0,1)",
+                        pointBackgroundColor: "rgba(0,200,0,0.6)",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(0,200,0,1)",
+                        pointHoverBorderColor: "rgba(0,200,0,1)",
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 3,
+                        pointHitRadius: 10,
+                        data : [{% for item in l.speed %}
+                                    {{item}},
+                                {% endfor %}],
+                        spanGaps: false
+                        },
+                    ]
+                }
+
+                // get chart canvas
+                var ctx = document.getElementById("myChart").getContext("2d");
+
+                // create the chart using the chart canvas
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: chartData,
+                });
+                </script>
+            </td>
+
+        </tr> <!--ряд с ячейками тела таблицы-->
+        {% endfor %}
+    </table>
+
+
+</ul>
+
+{% endblock %}

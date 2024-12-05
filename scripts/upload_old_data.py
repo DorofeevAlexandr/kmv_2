@@ -45,8 +45,8 @@ class PostgresDataLoader:
                         time = dt.datetime.strptime(row[0], '%H:%M')
                         dtime = dt.timedelta(hours=time.hour,
                                              minutes=time.minute)
-                        dtime_7_hours = dt.timedelta(hours=7)
-                        date_time = date + dtime + dtime_7_hours
+                        dtime_8_hours = dt.timedelta(hours=8)
+                        date_time = date + dtime + dtime_8_hours
                         # print(date_time)
                         row = [x if x != '' else '0' for x in row]
                         lengths = '{' + ','.join(row[1:]) + '}'

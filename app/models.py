@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, ForeignKey, Float, DATETIME, Boolean
+from sqlalchemy import Column, Integer, Text, ForeignKey, Float, DATETIME, Boolean, BigInteger
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
@@ -12,7 +12,7 @@ class Counters(Base):
 
     id = Column(Integer, primary_key=True)
     time = Column(DATETIME, nullable=True)
-    lengths = Column(ARRAY(Integer), nullable=True)
+    lengths = Column(ARRAY(BigInteger), nullable=True)
     connection_counters = Column(ARRAY(Boolean), nullable=True)
 
     def __repr__(self):
@@ -45,15 +45,11 @@ class LinesCurrentParams(Base):
 
     id = Column(Integer, primary_key=True)
     line_number = Column(Integer, unique=True)
-    no_connection_counter = Column(Boolean, nullable=True)
-    indicator_value = Column(Integer, nullable=True)
+    connection_counter = Column(Boolean, nullable=True)
+    indicator_value = Column(BigInteger, nullable=True)
     length = Column(Float, nullable=True)
     speed_line = Column(Float, nullable=True)
     updated_dt = Column(DATETIME, nullable=True)
 
     def __repr__(self):
         return f'{self.id} length = {self.length}, no_connection_counter = {self.no_connection_counter} '
-
-
-
-

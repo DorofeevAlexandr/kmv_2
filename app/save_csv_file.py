@@ -4,8 +4,8 @@ import os
 
 
 def append_in_csv(lines_name: list, current_lengths: list):
-    shift_hours = 7
-    file_name = create_dir(shift_hours=7)
+    shift_hours = 8
+    file_name = create_dir(shift_hours=8)
     write_header = not os.path.exists(file_name)
     with open(file_name, mode="a", encoding='utf-8') as w_file:
         file_writer = csv.writer(w_file, delimiter = ";", lineterminator="\r")
