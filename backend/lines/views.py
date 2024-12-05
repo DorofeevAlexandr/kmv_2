@@ -28,7 +28,7 @@ def index(request):
 
                 counters_values = get_counters_values_from_base(select_date)
                 speed_lines = get_speed_lines(counters_values)
-                time = [dt.timedelta(minutes=n) for n, speed in enumerate(speed_lines)]
+                time = [f'{n // 60}:{n % 60}' for n, speed in enumerate(speed_lines)]
                 lines_statistic = get_lines_statistic(speed_lines)
 
     else:
