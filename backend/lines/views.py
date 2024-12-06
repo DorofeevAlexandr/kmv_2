@@ -23,12 +23,14 @@ def index(request):
         form = ReadDataCounters(request.POST, request.FILES)
         if form.is_valid():
             select_date = form.cleaned_data.get('day', None)
-            print(select_date)
+            # print(select_date)
             if select_date:
 
                 counters_values = get_counters_values_from_base(select_date)
+                # print(counters_values)
                 speed_lines = get_speed_lines(counters_values)
-                time = [f'{n // 60}:{n % 60}' for n, speed in enumerate(speed_lines)]
+                # print(speed_lines)
+                time = [f'{((n // 60) + 8) % 24}:{n % 60}' for n, speed in enumerate(speed_lines[0])]
                 lines_statistic = get_lines_statistic(speed_lines)
 
     else:
@@ -39,8 +41,8 @@ def index(request):
         n = line['line_number']
         if lines_statistic and speed_lines:
             out_lines.append({**line,
-                              'statistic': lines_statistic[n],
-                              'speed': speed_lines[n]} )
+                              'statistic': lines_statistic[n - 1],
+                              'speed': speed_lines[n - 1]} )
     data = {
         'title': 'КМВ',
         #'menu': menu,

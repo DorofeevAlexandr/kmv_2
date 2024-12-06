@@ -60,10 +60,12 @@ def get_speed_lines(length_in_minute):
         length_lines = length_in_minute[n_minute]
         for n_line, length in enumerate(length_lines):
             try:
-                speed_lines[n_line][n_minute] = (length_in_minute[n_minute][n_line] -
-                                                 length_in_minute[n_minute - 1][n_line] / 1000)
-                if speed_lines[n_line][n_minute] > 10000:
+                speed = (length_in_minute[n_minute][n_line] -
+                        length_in_minute[n_minute - 1][n_line]) / 1000
+                if speed > 10000 or speed < 0:
                     speed_lines[n_line][n_minute] = 0
+                else:
+                    speed_lines[n_line][n_minute] = speed
             except:
                 speed_lines[n_line][n_minute] = 0
 
@@ -74,7 +76,7 @@ def get_speed_lines(length_in_minute):
 
 def num_smena(minute):
     hour = minute // 60
-    if 8 <= hour < 20:
+    if 0 <= hour < 12:
         return 1
     else:
         return 2
@@ -84,7 +86,7 @@ def get_lines_statistic(speed_lines):
     lines_statistic = []
 
     for num_line in range(COUNT_LINES):
-        line_runing = True
+        line_runing = False
         line_statistic = {
             'count_minute_line_run': 0,
             'count_minute_line_run_1': 0,
@@ -136,6 +138,10 @@ def get_lines_statistic(speed_lines):
                 line_statistic['made_kabel_1'] += metr_in_minute
             if smena == 2:
                 line_statistic['made_kabel_2'] += metr_in_minute
+
+        line_statistic['made_kabel'] = line_statistic['made_kabel'] / 1000
+        line_statistic['made_kabel_1'] = line_statistic['made_kabel_1'] / 1000
+        line_statistic['made_kabel_2'] = line_statistic['made_kabel_2'] / 1000
 
         for key in line_statistic:
             line_statistic[key] = f"{line_statistic[key]:5.1f}"
