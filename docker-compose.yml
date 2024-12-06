@@ -41,9 +41,9 @@ services:
 
   ftp:
     image: stilliard/pure-ftpd
-    container_name: ftp
+    container_name: ftp_1
     ports:
-      - 21:21
+      - "21:21"
     volumes:
       - data_base_csv:/sdo/
     env_file:
@@ -52,6 +52,11 @@ services:
       - PUBLICHOST=${FTP_PUBLICHOST}
       - FTP_USER_NAME=${FTP_USER_NAME}
       - FTP_USER_PASS=${FTP_USER_PASS}
+      - ADDED_FLAGS= "--tls=2"
+      - TLS_CN="localhost"
+      - TLS_ORG= "YourOrg"
+      - TLS_C= "DE"
+
 
 
 networks:
