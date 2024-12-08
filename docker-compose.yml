@@ -38,30 +38,32 @@ services:
       - data_base_csv:/var/data_base_csv
 
   ftp:
-    image: stilliard/pure-ftpd
-    container_name: ftp_1
-    ports:
-      - "21:21"
-    volumes:
-      - data_base_csv:/sdo/
+    image: fauria/vsftpd:latest
+    container_name: Ftp
+    restart: always
     env_file:
       - ./.env
     environment:
-      - PUBLICHOST=${FTP_PUBLICHOST}
-      - FTP_USER_NAME=${FTP_USER_NAME}
-      - FTP_USER_PASS=${FTP_USER_PASS}
-      - ADDED_FLAGS= "--tls=2"
-      - TLS_CN="localhost"
-      - TLS_ORG= "YourOrg"
-      - TLS_C= "DE"
-
-
+      - FTP_USER=USER1
+      - FTP_PASS=saransk
+      - PASV_ADDRESS=127.0.0.1
+      - PASV_MIN_PORT=21100
+      - PASV_MAX_PORT=21110
+    volumes:
+      - data_base_csv:/sdo/
+      - ftp-data:/home/vsftpd
+      - ftp-log-data:/var/log/vsftpd
+    ports:
+      - 0.0.0.0:20:20
+      - 0.0.0.0:21:21
 
 networks:
   bridge_network:
     driver: bridge
 
 volumes:
+    ftp-data:
+    ftp-log-data:
     static_volume: {}
     postgres_data: {}
     data_base_csv:
