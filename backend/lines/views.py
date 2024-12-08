@@ -35,18 +35,32 @@ def index(request):
 
     else:
         form = ReadDataCounters()
+    print(dt.datetime.now())
+    department_1 = sorted(filter(lambda line: line['department'] == '1', lines), key=lambda l: l["number_of_display"])
+    department_2 = sorted(filter(lambda line: line['department'] == '2', lines), key=lambda l: l["number_of_display"])
+    department_3 = sorted(filter(lambda line: line['department'] == '3', lines), key=lambda l: l["number_of_display"])
+    department_4 = sorted(filter(lambda line: line['department'] == 'ППК', lines), key=lambda l: l["number_of_display"])
+    departments = [
+        department_1,
+        department_2,
+        department_3,
+        department_4
+    ]
 
-    out_lines = []
-    for line in lines:
-        n = line['line_number']
-        if lines_statistic and speed_lines:
-            out_lines.append({**line,
-                              'statistic': lines_statistic[n - 1],
-                              'speed': speed_lines[n - 1]} )
+    out_department = []
+    for department in departments:
+        out_lines = []
+        for line in department:
+            n = line['line_number']
+            if lines_statistic and speed_lines:
+                out_lines.append({**line,
+                                  'statistic': lines_statistic[n - 1],
+                                  'speed': speed_lines[n - 1]} )
+        out_department.append(out_lines)
     data = {
         'title': 'КМВ',
         #'menu': menu,
-        'lines': out_lines,
+        'departments': out_department,
         'form': form,
         'times': time,
     }
