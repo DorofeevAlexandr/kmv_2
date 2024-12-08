@@ -53,9 +53,10 @@ def index(request):
         for line in department:
             n = line['line_number']
             if lines_statistic and speed_lines:
+                speed = [int(sp) for sp in  speed_lines[n - 1]]
                 out_lines.append({**line,
                                   'statistic': lines_statistic[n - 1],
-                                  'speed': speed_lines[n - 1]} )
+                                  'speed': speed} )
         out_department.append(out_lines)
     data = {
         'title': 'КМВ',
