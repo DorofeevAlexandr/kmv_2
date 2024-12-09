@@ -46,6 +46,7 @@ services:
       - bridge_network
     depends_on:
       - web
+    restart: always
 
   app :
     networks:
