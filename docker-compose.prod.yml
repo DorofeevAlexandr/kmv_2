@@ -65,13 +65,13 @@ services:
     env_file:
       - ./.env.prod
     environment:
-      - FTP_USER=${FTP_USER_NAME}
-      - FTP_PASS=${FTP_USER_PASS}
+      - FTP_USER=USER1
+      - FTP_PASS=saransk
       - PASV_ADDRESS=${FTP_PUBLICHOST}
       - PASV_MIN_PORT=21100
       - PASV_MAX_PORT=21110
     volumes:
-      - data_base_csv:/sdo/
+      - data_base_csv:/home/vsftpd
     ports:
       - 0.0.0.0:20:20
       - 0.0.0.0:21:21
