@@ -28,7 +28,7 @@
     <table width="100%" border="1">
         {% for l in lines %}
         <tr>
-            <td width="30%" > {{l.department}}-{{l.number_of_display}}
+            <td width="30%" > {{l.department}}-{{l.pseudonym}}
                 <table width="100%" border="1">
                     <tr><th>{{l.line_number}}-{{l.pseudonym}}</th><th>1 Смена</th><th>2 Смена</th><th>Сутки</th></tr>
                     <tr><th>Время, мин</th><td>{{l.statistic.count_minute_line_run_1}}</td><td>{{l.statistic.count_minute_line_run_2}}</td><td>{{l.statistic.count_minute_line_run}}</td></tr>
