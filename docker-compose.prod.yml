@@ -67,11 +67,11 @@ services:
     environment:
       - FTP_USER=USER1
       - FTP_PASS=saransk
-      - PASV_ADDRESS=${FTP_PUBLICHOST}
+      - PASV_ADDRESS=192.168.211.247
       - PASV_MIN_PORT=21100
       - PASV_MAX_PORT=21110
     volumes:
-      - data_base_csv:/home/vsftpd
+      - ftp-data:/home/vsftpd
     ports:
       - 0.0.0.0:20:20
       - 0.0.0.0:21:21
