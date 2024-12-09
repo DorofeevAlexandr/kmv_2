@@ -72,7 +72,6 @@ services:
       - PASV_MAX_PORT=21110
     volumes:
       - data_base_csv:/sdo/
-      - ftp-data:/
     ports:
       - 0.0.0.0:20:20
       - 0.0.0.0:21:21
