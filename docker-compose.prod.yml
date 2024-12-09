@@ -62,8 +62,6 @@ services:
     image: fauria/vsftpd:latest
     container_name: Ftp
     restart: always
-    env_file:
-      - ./.env.prod
     environment:
       - FTP_USER=USER1
       - FTP_PASS=saransk
@@ -72,9 +70,10 @@ services:
       - PASV_MAX_PORT=21110
     volumes:
       - ftp-data:/home/vsftpd
+      - ./ftp_conf/vsftpd.conf:/etc/vsftpd/vsftpd.conf
     ports:
-      - 0.0.0.0:20:20
-      - 0.0.0.0:21:21
+      - 20:20
+      - 21:21
 
 networks:
   bridge_network:
