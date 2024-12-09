@@ -60,7 +60,7 @@ services:
 
   ftp:
     image: fauria/vsftpd:latest
-    container_name: Ftp
+    container_name: ftp
     restart: always
     env_file:
       - ./.env.prod
@@ -71,7 +71,7 @@ services:
       - PASV_MIN_PORT=21100
       - PASV_MAX_PORT=21110
     volumes:
-      - ftp-data:/home/vsftpd
+      - data_base_csv:/sd0 :ro
     ports:
       - 20:20
       - 21:21
