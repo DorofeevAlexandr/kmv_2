@@ -71,7 +71,7 @@ services:
       - PASV_MIN_PORT=21100
       - PASV_MAX_PORT=21110
     volumes:
-      - data_base_csv:/sd0 :ro
+      - data_base_csv:/home/vsftpd
     ports:
       - 20:20
       - 21:21
