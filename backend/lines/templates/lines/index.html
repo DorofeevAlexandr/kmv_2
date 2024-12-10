@@ -89,11 +89,11 @@
                 var myChart{{l.line_number}} = new Chart(ctx, {
                     type: 'line',
                     data: chartData{{l.line_number}},
-<!--                    options: {-->
-<!--                                    scales: {-->
-<!--                                      y: { min: 0, max: 100}-->
-<!--                                    }-->
-<!--                              },-->
+                    options: {
+                        animation: { duration: 0, },
+                        hover: { animationDuration: 0, },
+                        responsiveAnimationDuration: 0,
+                        },
                 });
                 </script>
             </td>
