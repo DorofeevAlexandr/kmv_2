@@ -82,6 +82,22 @@ def num_smena(minute):
         return 2
 
 
+def antialiasing_speed_value(speed_lines: list):
+    for num_lines in range(len(speed_lines)):
+        speed0 = speed_lines[num_lines][0]
+        speed1 = speed_lines[num_lines][1]
+        speed2 = speed_lines[num_lines][2]
+        average_speed = (speed0 + speed1 + speed2) / 3
+        speed_lines[num_lines][0] = average_speed
+        speed_lines[num_lines][1] = average_speed
+        for minute in range(len(speed_lines[num_lines])):
+            speed2 = speed_lines[num_lines][minute]
+            average_speed = (speed0 + speed1 + speed2) / 3
+            speed_lines[num_lines][minute] = average_speed
+            speed0 = speed1
+            speed1 = speed2
+
+
 def get_lines_statistic(speed_lines):
     lines_statistic = []
 

@@ -5,7 +5,8 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.template.loader import render_to_string
-from .forms import ReadDataCounters, get_counters_values_from_base, get_speed_lines, get_lines_statistic, get_lines_from_base
+from .forms import (ReadDataCounters, get_counters_values_from_base, get_speed_lines, get_lines_statistic,
+                    get_lines_from_base, antialiasing_speed_value)
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Цех №1", 'url_name': 'index'},
@@ -29,6 +30,7 @@ def index(request):
                 counters_values = get_counters_values_from_base(select_date)
                 # print(counters_values)
                 speed_lines = get_speed_lines(counters_values)
+                antialiasing_speed_value(speed_lines)
                 # print(speed_lines)
                 time = [f'{((n // 60) + 8) % 24}:{n % 60}' for n, speed in enumerate(speed_lines[0])]
                 lines_statistic = get_lines_statistic(speed_lines)
