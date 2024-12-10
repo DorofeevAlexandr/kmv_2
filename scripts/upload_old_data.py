@@ -40,7 +40,7 @@ class PostgresDataLoader:
         try:
             with open(file_name, newline='',  errors="replace") as f:
                 for row in csv.reader(f, delimiter=';', quotechar='"'):
-                    if row[0] != 'Time - 7h' and len(row) < 60:
+                    if row[0] != 'Time - 7h' and len(row) < 70:
                         # print(row)
                         time = dt.datetime.strptime(row[0], '%H:%M')
                         dtime = dt.timedelta(hours=time.hour,
@@ -88,6 +88,7 @@ if __name__ == '__main__':
            'user':  os.environ.get('DB_USER'),
            'password': os.environ.get('DB_PASSWORD'),
            #'host': os.environ.get('DB_HOST', 'db'),
+           # 'host': '192.168.211.247',
            'host': 'localhost',
            'port': 5432,
            }

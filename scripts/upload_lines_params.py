@@ -71,6 +71,7 @@ if __name__ == '__main__':
            'user':  os.environ.get('DB_USER'),
            'password': os.environ.get('DB_PASSWORD'),
            # 'host': os.environ.get('DB_HOST', 'db'),
+           # 'host': '192.168.211.247',
            'host': 'localhost',
            'port': os.environ.get('DB_PORT', 5432),
            }
