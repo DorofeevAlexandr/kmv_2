@@ -32,7 +32,7 @@ def index(request):
                 speed_lines = get_speed_lines(counters_values)
                 antialiasing_speed_value(speed_lines)
                 # print(speed_lines)
-                time = [f'{((n // 60) + 8) % 24}:{n % 60}' for n, speed in enumerate(speed_lines[0])]
+                time = [dt.time(hour=((n // 60) + 8) % 24, minute = (n % 60)).strftime('%H:%M') for n, speed in enumerate(speed_lines[0])]
                 lines_statistic = get_lines_statistic(speed_lines)
 
     else:
