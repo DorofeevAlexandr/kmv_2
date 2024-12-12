@@ -15,8 +15,17 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 ]
 
 
+def get_smale_speed_lines(speed_lines: list):
+    result = []
+    for num_lines in range(len(speed_lines)):
+        result.append([])
+        for minute in range(0, len(speed_lines[num_lines]), 5):
+            result[num_lines].append(speed_lines[num_lines][minute])
+    return result
+
+
 def index(request):
-    speed_lines = []
+    smale_speed_lines = []
     lines_statistic = []
     time = []
     lines = get_lines_from_base()
@@ -32,8 +41,11 @@ def index(request):
                 speed_lines = get_speed_lines(counters_values)
                 antialiasing_speed_value(speed_lines)
                 # print(speed_lines)
-                time = [dt.time(hour=((n // 60) + 8) % 24, minute = (n % 60)).strftime('%H:%M') for n, speed in enumerate(speed_lines[0])]
+
                 lines_statistic = get_lines_statistic(speed_lines)
+                smale_speed_lines = get_smale_speed_lines(speed_lines)
+                time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)).strftime('%H:%M') for n, speed in
+                        enumerate(smale_speed_lines[0])]
 
     else:
         form = ReadDataCounters()
@@ -54,8 +66,8 @@ def index(request):
         out_lines = []
         for line in department:
             n = line['line_number']
-            if lines_statistic and speed_lines:
-                speed = [int(sp) for sp in  speed_lines[n - 1]]
+            if lines_statistic and smale_speed_lines:
+                speed = [int(sp) for sp in  smale_speed_lines[n - 1]]
                 out_lines.append({**line,
                                   'statistic': lines_statistic[n - 1],
                                   'speed': speed} )
