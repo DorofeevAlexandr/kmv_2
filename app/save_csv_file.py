@@ -11,7 +11,9 @@ def append_in_csv(lines_name: list, current_lengths: list):
         file_writer = csv.writer(w_file, delimiter = ";", lineterminator="\r")
         st_time = str((datetime.now() - timedelta(hours=shift_hours)).hour) + ':' + str(datetime.now().minute)
         if write_header:
-            file_writer.writerow(['Time - 7h'] + [line[0] for line in lines_name])
+            s = 'Time - 7h;RAS040;RAS041;RAS042;RAS032;RAS033;RAS034.1;RAS034.2;RAS035;RAS038;RAS039;REW1400;AV120;AV90;TB1600;TB63;REW2000;RAS047;RAS043;RAS036;T8;N-7;Lj400;SKETT;JLG 630/1+12;JLG (1+6)*630;JLK 630/12+18+24 B;AKZ-600;GT 120+45;JPD-2200;GT 120+120;FR ¹1;FR ¹2;FR ¹3;FR ¹4;FR ¹5;FR ¹6;FR ¹7;SETIC-630;LBK ¹2;SAMP-800;RAS044;WINDAK;DAK;NB 1250;T 40;PVH;Polietilen;Katalizator;Rezina;800 ¹2;FR ¹8;FR ¹9;LBK ¹4;Linda;120+45 ¹2;80+45;Valcy;Hibrid'
+            file_writer.writerow(s)
+            # file_writer.writerow(['Time - 7h'] + [line[0] for line in lines_name])
         file_writer.writerow([st_time] + [str(int(c_length[0] * 1000)) for c_length in current_lengths])
 
 def create_dir(shift_hours=0):
