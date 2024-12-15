@@ -110,7 +110,7 @@ def str_average_speed(made_kabel: float, minutes: int):
     else:
         average_speed = made_kabel / minutes
 
-    return f"{average_speed:5.1f}"
+    return f"{average_speed:6.1f}"
 
 
 def get_lines_statistic(speed_lines):
@@ -182,13 +182,13 @@ def get_lines_statistic(speed_lines):
         line_statistic['count_minute_line_run_1'] = get_str_time(line_statistic['count_minute_line_run_1'])
         line_statistic['count_minute_line_run_2'] = get_str_time(line_statistic['count_minute_line_run_2'])
 
-        line_statistic['max_value'] = f"{line_statistic['max_value']:5.1f}"
-        line_statistic['max_value_1'] = f"{line_statistic['max_value_1']:5.1f}"
-        line_statistic['max_value_2'] = f"{line_statistic['max_value_2']:5.1f}"
+        line_statistic['max_value'] = f"{line_statistic['max_value']:6.1f}"
+        line_statistic['max_value_1'] = f"{line_statistic['max_value_1']:6.1f}"
+        line_statistic['max_value_2'] = f"{line_statistic['max_value_2']:6.1f}"
 
-        line_statistic['made_kabel'] = f"{line_statistic['made_kabel']:5.1f}"
-        line_statistic['made_kabel_1'] = f"{line_statistic['made_kabel_1']:5.1f}"
-        line_statistic['made_kabel_2'] = f"{line_statistic['made_kabel_2']:5.1f}"
+        line_statistic['made_kabel'] = f"{line_statistic['made_kabel']:6.1f}"
+        line_statistic['made_kabel_1'] = f"{line_statistic['made_kabel_1']:6.1f}"
+        line_statistic['made_kabel_2'] = f"{line_statistic['made_kabel_2']:6.1f}"
 
         line_statistic['label_count_minute_line_run'] = 'Время работы'
         line_statistic['label_max_value'] = 'Макс. скорость, м/мин	'
@@ -201,3 +201,64 @@ def get_lines_statistic(speed_lines):
         lines_statistic.append(line_statistic)
 
     return lines_statistic
+
+
+def change_line_stat_twists_in_minute(lines_statistic: list, n: int):
+    lines_statistic[n - 1]['label_max_value'] = 'Макс. скорость, скруток/мин'
+    lines_statistic[n - 1]['label_average_speed'] = 'Средн. скорость, скруток/мин'
+    lines_statistic[n - 1]['label_made_kabel'] = 'Изготовленно, тыс. скруток'
+
+
+def change_line_stat_kg_in_minute(lines_statistic: list, n: int):
+    lines_statistic[n - 1]['label_max_value'] = 'Макс. скорость, кг/мин'
+    lines_statistic[n - 1]['label_average_speed'] = 'Средн. скорость, кг/мин'
+    lines_statistic[n - 1]['label_made_kabel'] = 'Изготовленно, т.'
+
+
+def change_line_stat_metr_in_second(lines_statistic: list, n: int):
+    lines_statistic[n - 1]['label_max_value'] = 'Макс. скорость, м/с'
+    lines_statistic[n - 1]['label_average_speed'] = 'Средн. скорость, м/с'
+
+    lines_statistic[n - 1]['max_value'] = f"{(float(lines_statistic[n - 1]['max_value']) / 60):5.1f}"
+    lines_statistic[n - 1]['max_value_1'] = f"{(float(lines_statistic[n - 1]['max_value_1']) / 60):5.1f}"
+    lines_statistic[n - 1]['max_value_2'] = f"{(float(lines_statistic[n - 1]['max_value_2']) / 60):5.1f}"
+
+    lines_statistic[n - 1]['average_speed'] = f"{(float(lines_statistic[n - 1]['average_speed']) / 60):5.1f}"
+    lines_statistic[n - 1]['average_speed_1'] = f"{(float(lines_statistic[n - 1]['average_speed_1']) / 60):5.1f}"
+    lines_statistic[n - 1]['average_speed_2'] = f"{(float(lines_statistic[n - 1]['average_speed_2']) / 60):5.1f}"
+
+
+
+def change_line_stat_rollers_57(lines_statistic: list, n: int):
+    lines_statistic[n - 1]['label_max_value'] = ' '
+    lines_statistic[n - 1]['label_average_speed'] = ' '
+    lines_statistic[n - 1]['label_made_kabel'] = ' '
+
+    lines_statistic[n - 1]['max_value'] = ''
+    lines_statistic[n - 1]['max_value_1'] = ''
+    lines_statistic[n - 1]['max_value_2'] = ''
+
+    lines_statistic[n - 1]['average_speed'] = ''
+    lines_statistic[n - 1]['average_speed_1'] = ''
+    lines_statistic[n - 1]['average_speed_2'] = ''
+
+    lines_statistic[n - 1]['made_kabel'] = ''
+    lines_statistic[n - 1]['made_kabel_1'] = ''
+    lines_statistic[n - 1]['made_kabel_2'] = ''
+
+
+def change_lines_statistic(lines_statistic:list):
+    change_line_stat_twists_in_minute(lines_statistic, 6)
+    change_line_stat_twists_in_minute(lines_statistic, 7)
+
+    change_line_stat_metr_in_second(lines_statistic, 9)
+    change_line_stat_metr_in_second(lines_statistic, 23)
+
+    change_line_stat_kg_in_minute(lines_statistic, 46)
+    change_line_stat_kg_in_minute(lines_statistic, 47)
+    change_line_stat_kg_in_minute(lines_statistic, 48)
+    change_line_stat_kg_in_minute(lines_statistic, 49)
+
+    change_line_stat_twists_in_minute(lines_statistic, 50)
+
+    change_line_stat_rollers_57(lines_statistic, 57)
