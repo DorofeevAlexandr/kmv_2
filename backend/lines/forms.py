@@ -104,6 +104,15 @@ def get_str_time(minutes: int):
     return dt.time(hour=hour, minute=minute).strftime('%H:%M')
 
 
+def str_average_speed(made_kabel: float, minutes: int):
+    if minutes == 0:
+        average_speed = 0
+    else:
+        average_speed = made_kabel / minutes
+
+    return f"{average_speed:5.1f}"
+
+
 def get_lines_statistic(speed_lines):
     lines_statistic = []
 
@@ -160,6 +169,10 @@ def get_lines_statistic(speed_lines):
                 line_statistic['made_kabel_1'] += metr_in_minute
             if smena == 2:
                 line_statistic['made_kabel_2'] += metr_in_minute
+
+        line_statistic['average_speed'] = str_average_speed(line_statistic['made_kabel'], line_statistic['count_minute_line_run'])
+        line_statistic['average_speed_1'] = str_average_speed(line_statistic['made_kabel_1'], line_statistic['count_minute_line_run_1'])
+        line_statistic['average_speed_2'] = str_average_speed(line_statistic['made_kabel_2'], line_statistic['count_minute_line_run_2'])
 
         line_statistic['made_kabel'] = line_statistic['made_kabel'] / 1000
         line_statistic['made_kabel_1'] = line_statistic['made_kabel_1'] / 1000
