@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.template.loader import render_to_string
 from .forms import (ReadDataCounters, get_counters_values_from_base, get_speed_lines, get_lines_statistic,
-                    get_lines_from_base, antialiasing_speed_value, change_lines_statistic)
+                    get_lines_from_base, antialiasing_speed_value, change_lines_statistic, change_speed_lines)
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Цех №1", 'url_name': 'index'},
@@ -45,6 +45,7 @@ def index(request):
                 lines_statistic = get_lines_statistic(speed_lines)
                 change_lines_statistic(lines_statistic)
                 smale_speed_lines = get_smale_speed_lines(speed_lines)
+                change_speed_lines(smale_speed_lines)
                 time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
                         enumerate(smale_speed_lines[0])]
 

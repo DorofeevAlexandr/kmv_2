@@ -219,13 +219,13 @@ def change_line_stat_metr_in_second(lines_statistic: list, n: int):
     lines_statistic[n - 1]['label_max_value'] = 'Макс. скорость, м/с'
     lines_statistic[n - 1]['label_average_speed'] = 'Средн. скорость, м/с'
 
-    lines_statistic[n - 1]['max_value'] = f"{(float(lines_statistic[n - 1]['max_value']) / 60):5.1f}"
-    lines_statistic[n - 1]['max_value_1'] = f"{(float(lines_statistic[n - 1]['max_value_1']) / 60):5.1f}"
-    lines_statistic[n - 1]['max_value_2'] = f"{(float(lines_statistic[n - 1]['max_value_2']) / 60):5.1f}"
+    lines_statistic[n - 1]['max_value'] = f"{(float(lines_statistic[n - 1]['max_value']) / 60.0):5.1f}"
+    lines_statistic[n - 1]['max_value_1'] = f"{(float(lines_statistic[n - 1]['max_value_1']) / 60.0):5.1f}"
+    lines_statistic[n - 1]['max_value_2'] = f"{(float(lines_statistic[n - 1]['max_value_2']) / 60.0):5.1f}"
 
-    lines_statistic[n - 1]['average_speed'] = f"{(float(lines_statistic[n - 1]['average_speed']) / 60):5.1f}"
-    lines_statistic[n - 1]['average_speed_1'] = f"{(float(lines_statistic[n - 1]['average_speed_1']) / 60):5.1f}"
-    lines_statistic[n - 1]['average_speed_2'] = f"{(float(lines_statistic[n - 1]['average_speed_2']) / 60):5.1f}"
+    lines_statistic[n - 1]['average_speed'] = f"{(float(lines_statistic[n - 1]['average_speed']) / 60.0):5.1f}"
+    lines_statistic[n - 1]['average_speed_1'] = f"{(float(lines_statistic[n - 1]['average_speed_1']) / 60.0):5.1f}"
+    lines_statistic[n - 1]['average_speed_2'] = f"{(float(lines_statistic[n - 1]['average_speed_2']) / 60.0):5.1f}"
 
 
 
@@ -262,3 +262,12 @@ def change_lines_statistic(lines_statistic:list):
     change_line_stat_twists_in_minute(lines_statistic, 50)
 
     change_line_stat_rollers_57(lines_statistic, 57)
+
+
+def change_speed_lines_metr_in_second(speed_lines:list, num_lines: int):
+    for minute in range(0, len(speed_lines[num_lines -1])):
+        speed_lines[num_lines -1][minute] = speed_lines[num_lines -1][minute] / 60.0
+
+def change_speed_lines(speed_lines:list):
+    change_speed_lines_metr_in_second(speed_lines, 9)
+    change_speed_lines_metr_in_second(speed_lines, 23)
