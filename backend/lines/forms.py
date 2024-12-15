@@ -98,6 +98,12 @@ def antialiasing_speed_value(speed_lines: list):
             speed1 = speed2
 
 
+def get_str_time(minutes: int):
+    hour = minutes // 60
+    minute = minutes % 60
+    return dt.time(hour=hour, minute=minute).strftime('%H:%M')
+
+
 def get_lines_statistic(speed_lines):
     lines_statistic = []
 
@@ -159,8 +165,18 @@ def get_lines_statistic(speed_lines):
         line_statistic['made_kabel_1'] = line_statistic['made_kabel_1'] / 1000
         line_statistic['made_kabel_2'] = line_statistic['made_kabel_2'] / 1000
 
-        for key in line_statistic:
-            line_statistic[key] = f"{line_statistic[key]:5.1f}"
-        lines_statistic.append(line_statistic                               )
+        line_statistic['count_minute_line_run'] = get_str_time(line_statistic['count_minute_line_run'])
+        line_statistic['count_minute_line_run_1'] = get_str_time(line_statistic['count_minute_line_run_1'])
+        line_statistic['count_minute_line_run_2'] = get_str_time(line_statistic['count_minute_line_run_2'])
+
+        line_statistic['max_value'] = f"{line_statistic['max_value']:5.1f}"
+        line_statistic['max_value_1'] = f"{line_statistic['max_value_1']:5.1f}"
+        line_statistic['max_value_2'] = f"{line_statistic['max_value_2']:5.1f}"
+
+        line_statistic['made_kabel'] = f"{line_statistic['made_kabel']:5.1f}"
+        line_statistic['made_kabel_1'] = f"{line_statistic['made_kabel_1']:5.1f}"
+        line_statistic['made_kabel_2'] = f"{line_statistic['made_kabel_2']:5.1f}"
+
+        lines_statistic.append(line_statistic)
 
     return lines_statistic
