@@ -44,7 +44,7 @@ def index(request):
 
                 lines_statistic = get_lines_statistic(speed_lines)
                 smale_speed_lines = get_smale_speed_lines(speed_lines)
-                time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)).strftime('%H:%M') for n, speed in
+                time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
                         enumerate(smale_speed_lines[0])]
 
     else:
