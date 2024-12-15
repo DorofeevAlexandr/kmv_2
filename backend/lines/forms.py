@@ -190,6 +190,14 @@ def get_lines_statistic(speed_lines):
         line_statistic['made_kabel_1'] = f"{line_statistic['made_kabel_1']:5.1f}"
         line_statistic['made_kabel_2'] = f"{line_statistic['made_kabel_2']:5.1f}"
 
+        line_statistic['label_count_minute_line_run'] = 'Время работы'
+        line_statistic['label_max_value'] = 'Макс. скорость, м/мин	'
+        line_statistic['label_average_speed'] = 'Средн. скорость, м/мин	'
+        line_statistic['label_made_kabel'] = 'Изготовленно, км'
+        line_statistic['label_stop_count'] = 'Количество остановок'
+        line_statistic['label_kmv'] = 'КМВ'
+
+
         lines_statistic.append(line_statistic)
 
     return lines_statistic
