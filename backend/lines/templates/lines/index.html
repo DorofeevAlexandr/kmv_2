@@ -28,7 +28,7 @@
     <table width="100%" border="1">
         {% for l in lines %}
         <tr>
-            <td width="30%" > {{l.department}}-{{l.pseudonym}}
+            <td width="20%" > {{l.department}}-{{l.pseudonym}}
                 <table width="100%" border="1">
                     <tr><th>{{l.line_number}}-{{l.pseudonym}}</th><th>1 Смена</th><th>2 Смена</th><th>Сутки</th></tr>
                     <tr><th>Время, мин</th><td>{{l.statistic.count_minute_line_run_1}}</td><td>{{l.statistic.count_minute_line_run_2}}</td><td>{{l.statistic.count_minute_line_run}}</td></tr>
@@ -39,7 +39,7 @@
 <!--                    <tr><th>КМВ</th><td>{{stat.}}</td><td>{{stat.}}</td><td>{{stat.}}</td></tr>-->
                 </table>
             </td>
-            <td width="70%" >
+            <td width="80%" >
                         <!-- bar chart canvas element -->
             <canvas id="myChart{{l.line_number}}" height="50%"></canvas>
             <script>
@@ -84,9 +84,15 @@
 <!--                            }],-->
                             x: {
                                 ticks: {
+                                    font: {size: 10},
                                     maxRotation: 0,
                                     minRotation: 0,
                                 }
+                            },
+                            y: {
+                                ticks: {
+                                    font: {size: 10},
+                                },
                             },
                         },
             }
