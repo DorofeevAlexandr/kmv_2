@@ -37,3 +37,12 @@ CREATE TABLE IF NOT EXISTS lines_current_params (
     speed_line Float,
     updated_dt timestamp
 );
+
+--lines_statistics
+CREATE TABLE IF NOT EXISTS lines_statistics (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
+    date timestamp NOT NULL,
+    made_kabel  bigint[]
+);
+
+CREATE index IF NOT EXISTS times_lines_statistics_idx ON lines_statistics(date);
