@@ -1,15 +1,17 @@
 import datetime as dt
+from calendar import month, Month
 from os import times
+from dateutil.relativedelta import relativedelta
 
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.template.loader import render_to_string
-from .forms import (ReadDataCounters, get_counters_values_from_base, get_speed_lines, get_lines_statistic,
+from .forms import (ReadDataCounters, ReadAndSaveLinesStatistic, get_counters_values_from_base, get_speed_lines, get_lines_statistic,
                     get_lines_from_base, antialiasing_speed_value, change_lines_statistic, change_speed_lines)
 
 menu = [{'title': "Данные за день", 'url_name': 'home'},
-        {'title': "Статистика за период", 'url_name': 'statistic'},
+        {'title': "Статистика за месяц", 'url_name': 'statistic'},
         {'title': "", 'url_name': 'tuning'},
 ]
 
@@ -21,6 +23,19 @@ def get_smale_speed_lines(speed_lines: list):
         for minute in range(0, len(speed_lines[num_lines]), 5):
             result[num_lines].append(speed_lines[num_lines][minute])
     return result
+
+
+def get_departments(lines: list):
+    department_1 = sorted(filter(lambda line: line['department'] == '1', lines), key=lambda l: l["number_of_display"])
+    department_2 = sorted(filter(lambda line: line['department'] == '2', lines), key=lambda l: l["number_of_display"])
+    department_3 = sorted(filter(lambda line: line['department'] == '3', lines), key=lambda l: l["number_of_display"])
+    department_4 = sorted(filter(lambda line: line['department'] == 'ППК', lines), key=lambda l: l["number_of_display"])
+    return [
+            department_1,
+            department_2,
+            department_3,
+            department_4
+           ]
 
 
 def index(request):
@@ -50,17 +65,8 @@ def index(request):
 
     else:
         form = ReadDataCounters()
-    print(dt.datetime.now())
-    department_1 = sorted(filter(lambda line: line['department'] == '1', lines), key=lambda l: l["number_of_display"])
-    department_2 = sorted(filter(lambda line: line['department'] == '2', lines), key=lambda l: l["number_of_display"])
-    department_3 = sorted(filter(lambda line: line['department'] == '3', lines), key=lambda l: l["number_of_display"])
-    department_4 = sorted(filter(lambda line: line['department'] == 'ППК', lines), key=lambda l: l["number_of_display"])
-    departments = [
-        department_1,
-        department_2,
-        department_3,
-        department_4
-    ]
+
+    departments = get_departments(lines)
 
     out_department = []
     for department in departments:
@@ -74,7 +80,7 @@ def index(request):
                                   'speed': speed} )
         out_department.append(out_lines)
     data = {
-        'title': 'КМВ',
+        'title': 'КМВ - Данные за день',
         #'menu': menu,
         'departments': out_department,
         'form': form,
@@ -85,64 +91,59 @@ def index(request):
 
 
 def statistic(request):
-    smale_speed_lines = []
-    lines_statistic = []
-    time = []
+    made_kabel_in_days = []
+    times = []
     lines = get_lines_from_base()
     if request.method == 'POST':
-        form = ReadDataCounters(request.POST, request.FILES)
+        form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
-            select_date = form.cleaned_data.get('day', None)
-            # print(select_date)
-            if select_date:
+            calendar_date = form.cleaned_data.get('start_day', None)
+            start_date = dt.datetime(year=calendar_date.year,
+                                 month=calendar_date.month,
+                                 day=1)
+            end_date = start_date + relativedelta(months=1)
+            print(end_date)
 
-                counters_values = get_counters_values_from_base(select_date)
-                # print(counters_values)
-                speed_lines = get_speed_lines(counters_values)
-                antialiasing_speed_value(speed_lines)
-                # print(speed_lines)
+            if start_date:
+                cur_date = start_date
+                made_kabel_in_days = []
+                times = []
+                while cur_date < end_date:
+                    # print(cur_date)
+                    counters_values = get_counters_values_from_base(cur_date)
+                    speed_lines = get_speed_lines(counters_values)
+                    antialiasing_speed_value(speed_lines)
+                    lines_statistic = get_lines_statistic(speed_lines)
+                    made_kabel_in_days.append([int(float(ls['made_kabel'])) for ls in lines_statistic])
+                    times.append(cur_date)
 
-                lines_statistic = get_lines_statistic(speed_lines)
-                change_lines_statistic(lines_statistic)
-                smale_speed_lines = get_smale_speed_lines(speed_lines)
-                change_speed_lines(smale_speed_lines)
-                time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
-                        enumerate(smale_speed_lines[0])]
+                    cur_date = cur_date + dt.timedelta(days=1)
+                # print(made_kabel_in_days)
 
     else:
-        form = ReadDataCounters()
-    print(dt.datetime.now())
-    department_1 = sorted(filter(lambda line: line['department'] == '1', lines), key=lambda l: l["number_of_display"])
-    department_2 = sorted(filter(lambda line: line['department'] == '2', lines), key=lambda l: l["number_of_display"])
-    department_3 = sorted(filter(lambda line: line['department'] == '3', lines), key=lambda l: l["number_of_display"])
-    department_4 = sorted(filter(lambda line: line['department'] == 'ППК', lines), key=lambda l: l["number_of_display"])
-    departments = [
-        department_1,
-        department_2,
-        department_3,
-        department_4
-    ]
+        form = ReadAndSaveLinesStatistic()
+    departments = get_departments(lines)
+
 
     out_department = []
     for department in departments:
         out_lines = []
         for line in department:
             n = line['line_number']
-            if lines_statistic and smale_speed_lines:
-                speed = [int(sp) for sp in  smale_speed_lines[n - 1]]
+            if made_kabel_in_days:
+                made_kabel = [day_values[n - 1] for day_values in  made_kabel_in_days]
                 out_lines.append({**line,
-                                  'statistic': lines_statistic[n - 1],
-                                  'speed': speed} )
+                                  'sum_made_kabel': sum(made_kabel),
+                                  'made_kabel': made_kabel} )
         out_department.append(out_lines)
     data = {
-        'title': 'КМВ',
-        #'menu': menu,
+        'title': 'КМВ - Статистика за месяц',
+        'menu': menu,
         'departments': out_department,
         'form': form,
-        'times': time,
-        'menu': menu,
+        'times': times,
     }
-    return render(request, 'lines/index.html', context=data)
+    return render(request, 'lines/statistic.html', context=data)
 
 
 
@@ -153,21 +154,6 @@ def tuning(request):
          'menu': menu,
     }
     return render(request, 'lines/index.html', context=data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

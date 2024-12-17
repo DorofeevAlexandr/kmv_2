@@ -18,7 +18,15 @@ class ReadDataCounters(forms.Form):
                           input_formats=["%Y-%m-%d"]
                           )
 
-    # department = forms.CharField(max_length=255)
+
+class ReadAndSaveLinesStatistic(forms.Form):
+    start_day = forms.DateField(initial=dt.date.today,
+                          label="Выберите месяц",
+                          required=True,
+                          widget=forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
+                          input_formats=["%Y-%m-%d"]
+                          )
+
 
 def get_lines_from_base():
     out_lines = []
