@@ -8,10 +8,9 @@ from django.template.loader import render_to_string
 from .forms import (ReadDataCounters, get_counters_values_from_base, get_speed_lines, get_lines_statistic,
                     get_lines_from_base, antialiasing_speed_value, change_lines_statistic, change_speed_lines)
 
-menu = [{'title': "О сайте", 'url_name': 'about'},
-        {'title': "Цех №1", 'url_name': 'index'},
-        {'title': "Цех №2", 'url_name': 'index'},
-        {'title': "Цех №3", 'url_name': 'index'}
+menu = [{'title': "Данные за день", 'url_name': 'home'},
+        {'title': "Статистика за период", 'url_name': 'statistic'},
+        {'title': "", 'url_name': 'tuning'},
 ]
 
 
@@ -80,10 +79,80 @@ def index(request):
         'departments': out_department,
         'form': form,
         'times': time,
+        'menu': menu,
     }
     return render(request, 'lines/index.html', context=data)
 
 
+def statistic(request):
+    smale_speed_lines = []
+    lines_statistic = []
+    time = []
+    lines = get_lines_from_base()
+    if request.method == 'POST':
+        form = ReadDataCounters(request.POST, request.FILES)
+        if form.is_valid():
+            select_date = form.cleaned_data.get('day', None)
+            # print(select_date)
+            if select_date:
+
+                counters_values = get_counters_values_from_base(select_date)
+                # print(counters_values)
+                speed_lines = get_speed_lines(counters_values)
+                antialiasing_speed_value(speed_lines)
+                # print(speed_lines)
+
+                lines_statistic = get_lines_statistic(speed_lines)
+                change_lines_statistic(lines_statistic)
+                smale_speed_lines = get_smale_speed_lines(speed_lines)
+                change_speed_lines(smale_speed_lines)
+                time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
+                        enumerate(smale_speed_lines[0])]
+
+    else:
+        form = ReadDataCounters()
+    print(dt.datetime.now())
+    department_1 = sorted(filter(lambda line: line['department'] == '1', lines), key=lambda l: l["number_of_display"])
+    department_2 = sorted(filter(lambda line: line['department'] == '2', lines), key=lambda l: l["number_of_display"])
+    department_3 = sorted(filter(lambda line: line['department'] == '3', lines), key=lambda l: l["number_of_display"])
+    department_4 = sorted(filter(lambda line: line['department'] == 'ППК', lines), key=lambda l: l["number_of_display"])
+    departments = [
+        department_1,
+        department_2,
+        department_3,
+        department_4
+    ]
+
+    out_department = []
+    for department in departments:
+        out_lines = []
+        for line in department:
+            n = line['line_number']
+            if lines_statistic and smale_speed_lines:
+                speed = [int(sp) for sp in  smale_speed_lines[n - 1]]
+                out_lines.append({**line,
+                                  'statistic': lines_statistic[n - 1],
+                                  'speed': speed} )
+        out_department.append(out_lines)
+    data = {
+        'title': 'КМВ',
+        #'menu': menu,
+        'departments': out_department,
+        'form': form,
+        'times': time,
+        'menu': menu,
+    }
+    return render(request, 'lines/index.html', context=data)
+
+
+
+def tuning(request):
+
+    data = {
+        'title': 'КМВ',
+         'menu': menu,
+    }
+    return render(request, 'lines/index.html', context=data)
 
 
 
