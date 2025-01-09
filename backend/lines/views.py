@@ -98,7 +98,7 @@ def statistic(request):
         form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
             calendar_date = form.cleaned_data.get('start_day', None)
-            start_date = dt.datetime(year=calendar_date.year,
+            start_date = dt.date(year=calendar_date.year,
                                  month=calendar_date.month,
                                  day=1)
             end_date = start_date + relativedelta(months=1)
