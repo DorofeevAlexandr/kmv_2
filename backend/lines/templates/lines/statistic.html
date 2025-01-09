@@ -42,7 +42,7 @@
             var ctx = document.getElementById('myChart{{l.line_number}}');
 
             var myChart{{l.line_number}} = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
               labels : [{% for item in times %}
                                     "{{item}}",
@@ -53,6 +53,7 @@
                                             {{item}},
                                         {% endfor %}],
                 borderColor: "rgba(0,160,0,1)",
+                backgroundColor: "rgba(0, 160, 0, 1)",
                 pointRadius: 1,
                 pointHitRadius: 10,
                 stepped: 'middle',
