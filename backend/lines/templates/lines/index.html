@@ -10,17 +10,19 @@
     </form>
 
 <div class="tabs">
-    <input type="radio" name="inset" value="" id="tab_1" checked>
-    <label for="tab_1">Цех № 1</label>
+    {% if departments|length == 1 %}
+        <input type="radio" name="inset" value="" id="tab_1" checked>
+        <label for="tab_1">ППК</label>
+    {% else %}
+        <input type="radio" name="inset" value="" id="tab_1" checked>
+        <label for="tab_1">Цех № 1</label>
 
-    <input type="radio" name="inset" value="" id="tab_2">
-    <label for="tab_2">Цех № 2</label>
+        <input type="radio" name="inset" value="" id="tab_2">
+        <label for="tab_2">Цех № 2</label>
 
-    <input type="radio" name="inset" value="" id="tab_3">
-    <label for="tab_3">Цех № 3</label>
-
-<!--    <input type="radio" name="inset" value="" id="tab_4">-->
-<!--    <label for="tab_4">ППК</label>-->
+        <input type="radio" name="inset" value="" id="tab_3">
+        <label for="tab_3">Цех № 3</label>
+    {% endif %}
 
     {% for lines in departments %}
     <div id="txt_{{forloop.counter}}">
