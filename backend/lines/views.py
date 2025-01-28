@@ -15,6 +15,11 @@ menu = [{'title': "Данные за день", 'url_name': 'home'},
         {'title': "", 'url_name': 'tuning'},
 ]
 
+menu_ppk = [{'title': "Данные за день ППК", 'url_name': 'home_ppk'},
+        {'title': "Статистика за месяц ППК", 'url_name': 'statistic_ppk'},
+        {'title': "", 'url_name': 'tuning'},
+]
+
 
 def get_smale_speed_lines(speed_lines: list):
     result = []

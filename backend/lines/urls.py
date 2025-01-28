@@ -6,7 +6,9 @@ from . import converters
 register_converter(converters.FourDigitYearConverter, "year4")
 
 urlpatterns = [
-    path('', views.index, name='home'),  # http://127.0.0.1:8000
+    path('', views.index, name='home'),
     path('statistic', views.statistic, name='statistic'),
+    path('ppk', views.index, name='home_ppk'),
+    path('statistic_ppk', views.statistic, name='statistic_ppk'),
     path('tuning', views.tuning, name='tuning'),
 ]
