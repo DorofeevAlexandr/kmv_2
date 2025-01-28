@@ -43,36 +43,23 @@ def get_departments(lines: list):
            ]
 
 
-def index(request):
-    smale_speed_lines = []
-    lines_statistic = []
-    time = []
-    lines = get_lines_from_base()
-    if request.method == 'POST':
-        form = ReadDataCounters(request.POST, request.FILES)
-        if form.is_valid():
-            select_date = form.cleaned_data.get('day', None)
-            # print(select_date)
-            if select_date:
+def get_data_in_select_date(select_date: dt.datetime):
+    counters_values = get_counters_values_from_base(select_date)
+    # print(counters_values)
+    speed_lines = get_speed_lines(counters_values)
+    antialiasing_speed_value(speed_lines)
+    # print(speed_lines)
 
-                counters_values = get_counters_values_from_base(select_date)
-                # print(counters_values)
-                speed_lines = get_speed_lines(counters_values)
-                antialiasing_speed_value(speed_lines)
-                # print(speed_lines)
+    lines_statistic = get_lines_statistic(speed_lines)
+    change_lines_statistic(lines_statistic)
+    smale_speed_lines = get_smale_speed_lines(speed_lines)
+    change_speed_lines(smale_speed_lines)
+    time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
+            enumerate(smale_speed_lines[0])]
+    return time, smale_speed_lines, lines_statistic
 
-                lines_statistic = get_lines_statistic(speed_lines)
-                change_lines_statistic(lines_statistic)
-                smale_speed_lines = get_smale_speed_lines(speed_lines)
-                change_speed_lines(smale_speed_lines)
-                time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
-                        enumerate(smale_speed_lines[0])]
 
-    else:
-        form = ReadDataCounters()
-
-    departments = get_departments(lines)
-
+def get_sorted_departments_data(departments, lines_statistic, smale_speed_lines):
     out_department = []
     for department in departments:
         out_lines = []
@@ -84,9 +71,28 @@ def index(request):
                                   'statistic': lines_statistic[n - 1],
                                   'speed': speed} )
         out_department.append(out_lines)
+    return out_department
+
+
+def index(request):
+    smale_speed_lines = []
+    lines_statistic = []
+    time = []
+    lines = get_lines_from_base()
+    if request.method == 'POST':
+        form = ReadDataCounters(request.POST, request.FILES)
+        if form.is_valid():
+            select_date = form.cleaned_data.get('day', None)
+            if select_date:
+                time, smale_speed_lines, lines_statistic = get_data_in_select_date(select_date)
+    else:
+        form = ReadDataCounters()
+
+    departments = get_departments(lines)
+    out_department = get_sorted_departments_data(departments, lines_statistic, smale_speed_lines)
+
     data = {
         'title': 'КМВ - Данные за день',
-        #'menu': menu,
         'departments': out_department,
         'form': form,
         'times': time,
