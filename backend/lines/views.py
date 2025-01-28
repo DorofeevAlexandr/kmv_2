@@ -101,41 +101,31 @@ def index(request):
     return render(request, 'lines/index.html', context=data)
 
 
-def statistic(request):
+def get_statistics_select_period(start_date: dt.date):
+    end_date = start_date + relativedelta(months=1)
+
     made_kabel_in_days = []
     times = []
-    lines = get_lines_from_base()
-    if request.method == 'POST':
-        form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
-        if form.is_valid():
-            calendar_date = form.cleaned_data.get('start_day', None)
-            start_date = dt.date(year=calendar_date.year,
-                                 month=calendar_date.month,
-                                 day=1)
-            end_date = start_date + relativedelta(months=1)
-            print(end_date)
 
-            if start_date:
-                cur_date = start_date
-                made_kabel_in_days = []
-                times = []
-                while cur_date < end_date:
-                    # print(cur_date)
-                    counters_values = get_counters_values_from_base(cur_date)
-                    speed_lines = get_speed_lines(counters_values)
-                    antialiasing_speed_value(speed_lines)
-                    lines_statistic = get_lines_statistic(speed_lines)
-                    made_kabel_in_days.append([int(float(ls['made_kabel'])) for ls in lines_statistic])
-                    times.append(cur_date)
+    if start_date:
+        cur_date = start_date
+        made_kabel_in_days = []
+        times = []
+        while cur_date < end_date:
+            # print(cur_date)
+            counters_values = get_counters_values_from_base(cur_date)
+            speed_lines = get_speed_lines(counters_values)
+            antialiasing_speed_value(speed_lines)
+            lines_statistic = get_lines_statistic(speed_lines)
+            made_kabel_in_days.append([int(float(ls['made_kabel'])) for ls in lines_statistic])
+            times.append(cur_date)
 
-                    cur_date = cur_date + dt.timedelta(days=1)
-                # print(made_kabel_in_days)
-
-    else:
-        form = ReadAndSaveLinesStatistic()
-    departments = get_departments(lines)
+            cur_date = cur_date + dt.timedelta(days=1)
+        # print(made_kabel_in_days)
+    return times, made_kabel_in_days
 
 
+def get_sorted_departments_statistic(departments, made_kabel_in_days):
     out_department = []
     for department in departments:
         out_lines = []
@@ -147,6 +137,26 @@ def statistic(request):
                                   'sum_made_kabel': sum(made_kabel),
                                   'made_kabel': made_kabel} )
         out_department.append(out_lines)
+    return out_department
+
+def statistic(request):
+    made_kabel_in_days = []
+    times = []
+    lines = get_lines_from_base()
+    if request.method == 'POST':
+        form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
+        if form.is_valid():
+            calendar_date = form.cleaned_data.get('start_day', None)
+            start_date = dt.date(year=calendar_date.year,
+                                 month=calendar_date.month,
+                                 day=1)
+            times, made_kabel_in_days = get_statistics_select_period(start_date)
+    else:
+        form = ReadAndSaveLinesStatistic()
+
+    departments = get_departments(lines)
+    out_department = get_sorted_departments_statistic(departments, made_kabel_in_days)
+
     data = {
         'title': 'КМВ - Статистика за месяц',
         'menu': menu,
