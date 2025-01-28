@@ -15,7 +15,7 @@ menu = [{'title': "Данные за день", 'url_name': 'home'},
         {'title': "", 'url_name': 'tuning'},
 ]
 
-menu_ppk = [{'title': "Данные за день ППК", 'url_name': 'home_ppk'},
+menu_ppk = [{'title': "Данные за день ППК", 'url_name': 'data_in_day_ppk'},
         {'title': "Статистика за месяц ППК", 'url_name': 'statistic_ppk'},
         {'title': "", 'url_name': 'tuning'},
 ]
@@ -40,6 +40,13 @@ def get_departments(lines: list):
             department_2,
             department_3,
             # department_4
+           ]
+
+
+def get_departments_ppk(lines: list):
+    department_4 = sorted(filter(lambda line: line['department'] == 'ППК', lines), key=lambda l: l["number_of_display"])
+    return [
+            department_4
            ]
 
 
@@ -101,6 +108,33 @@ def index(request):
     return render(request, 'lines/index.html', context=data)
 
 
+def data_in_day_ppk(request):
+    smale_speed_lines = []
+    lines_statistic = []
+    time = []
+    lines = get_lines_from_base()
+    if request.method == 'POST':
+        form = ReadDataCounters(request.POST, request.FILES)
+        if form.is_valid():
+            select_date = form.cleaned_data.get('day', None)
+            if select_date:
+                time, smale_speed_lines, lines_statistic = get_data_in_select_date(select_date)
+    else:
+        form = ReadDataCounters()
+
+    departments = get_departments_ppk(lines)
+    out_department = get_sorted_departments_data(departments, lines_statistic, smale_speed_lines)
+
+    data = {
+        'title': 'КМВ - Данные за день ППК',
+        'departments': out_department,
+        'form': form,
+        'times': time,
+        'menu': menu_ppk,
+    }
+    return render(request, 'lines/index.html', context=data)
+
+
 def get_statistics_select_period(start_date: dt.date):
     end_date = start_date + relativedelta(months=1)
 
@@ -139,6 +173,7 @@ def get_sorted_departments_statistic(departments, made_kabel_in_days):
         out_department.append(out_lines)
     return out_department
 
+
 def statistic(request):
     made_kabel_in_days = []
     times = []
@@ -166,6 +201,33 @@ def statistic(request):
     }
     return render(request, 'lines/statistic.html', context=data)
 
+
+def statistic_ppk(request):
+    made_kabel_in_days = []
+    times = []
+    lines = get_lines_from_base()
+    if request.method == 'POST':
+        form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
+        if form.is_valid():
+            calendar_date = form.cleaned_data.get('start_day', None)
+            start_date = dt.date(year=calendar_date.year,
+                                 month=calendar_date.month,
+                                 day=1)
+            times, made_kabel_in_days = get_statistics_select_period(start_date)
+    else:
+        form = ReadAndSaveLinesStatistic()
+
+    departments = get_departments_ppk(lines)
+    out_department = get_sorted_departments_statistic(departments, made_kabel_in_days)
+
+    data = {
+        'title': 'КМВ - Статистика за месяц ППК',
+        'menu': menu_ppk,
+        'departments': out_department,
+        'form': form,
+        'times': times,
+    }
+    return render(request, 'lines/statistic.html', context=data)
 
 
 def tuning(request):

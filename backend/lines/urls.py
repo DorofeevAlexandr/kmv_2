@@ -8,7 +8,7 @@ register_converter(converters.FourDigitYearConverter, "year4")
 urlpatterns = [
     path('', views.index, name='home'),
     path('statistic', views.statistic, name='statistic'),
-    path('ppk', views.index, name='home_ppk'),
-    path('statistic_ppk', views.statistic, name='statistic_ppk'),
+    path('ppk', views.data_in_day_ppk, name='data_in_day_ppk'),
+    path('statistic_ppk', views.statistic_ppk, name='statistic_ppk'),
     path('tuning', views.tuning, name='tuning'),
 ]
