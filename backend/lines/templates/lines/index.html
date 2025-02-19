@@ -50,14 +50,10 @@
             var myChart{{l.line_number}} = new Chart(ctx, {
             type: 'line',
             data: {
-              labels : [{% for item in times %}
-                                    "{{item}}",
-                                {% endfor %}],
+labels : [{% for item in times %} "{{item}}", {% endfor %}],
               datasets: [{
                 label: '{{l.pseudonym}}',
-                data : [{% for item in l.speed %}
-                                            {{item}},
-                                        {% endfor %}],
+data : [{% for item in l.speed %} {{item}}, {% endfor %}],
                 borderColor: "rgba(0,160,0,1)",
                 pointRadius: 1,
                 pointHitRadius: 10,
