@@ -47,14 +47,10 @@
             var myChart{{l.line_number}} = new Chart(ctx, {
             type: 'bar',
             data: {
-              labels : [{% for item in times %}
-                                    "{{item}}",
-                                {% endfor %}],
+labels : [{% for item in times %} "{{item}}", {% endfor %}],
               datasets: [{
                 label: '{{l.pseudonym}}',
-                data : [{% for item in l.made_kabel %}
-                                            {{item}},
-                                        {% endfor %}],
+data : [{% for item in l.made_kabel %} {{item}}, {% endfor %}],
                 borderColor: "rgba(0,160,0,1)",
                 backgroundColor: "rgba(0, 160, 0, 1)",
                 pointRadius: 1,
