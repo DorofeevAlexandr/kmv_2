@@ -12,13 +12,13 @@ from .work_with_data import (get_data_in_select_date, get_departments, get_depar
 
 menu = [{'title': "Данные за день", 'url_name': 'home'},
         {'title': "Статистика за месяц", 'url_name': 'statistic'},
-        {'title': "Статистика за год", 'url_name': 'statistics_for_the_year'},
+        # {'title': "Статистика за год", 'url_name': 'statistics_for_the_year'},
         {'title': "", 'url_name': 'tuning'},
 ]
 
 menu_ppk = [{'title': "Данные за день ППК", 'url_name': 'data_in_day_ppk'},
         {'title': "Статистика за месяц ППК", 'url_name': 'statistic_ppk'},
-        {'title': "Статистика за год ППК", 'url_name': 'statistics_for_the_year_ppk'},
+        # {'title': "Статистика за год ППК", 'url_name': 'statistics_for_the_year_ppk'},
         {'title': "", 'url_name': 'tuning'},
 ]
 

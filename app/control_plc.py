@@ -10,7 +10,7 @@ PLC_HOST = os.environ.get('PLC_HOST')
 PLC_PORT = 502
 
 # set global
-regs = {key: 0 for key in range(0, 700)}
+regs = {key: 0 for key in range(0, 800)}
 # print(regs)
 
 stack_of_writable_register = []
@@ -35,9 +35,10 @@ def polling_thread():
         reg_list_4 = c.read_holding_registers(400, 100)
         reg_list_5 = c.read_holding_registers(500, 100)
         reg_list_6 = c.read_holding_registers(600, 100)
+        reg_list_7 = c.read_holding_registers(700, 100)
 
         # if read is ok, store result in regs (with thread lock synchronization)
-        if reg_list_0 and reg_list_1 and reg_list_2 and reg_list_3 and reg_list_4 and reg_list_5 and reg_list_6:
+        if reg_list_0 and reg_list_1 and reg_list_2 and reg_list_3 and reg_list_4 and reg_list_5 and reg_list_6 and reg_list_7:
             with regs_lock:
                 for i in range(0, 100):
                     regs[0 + i] = reg_list_0[i]
@@ -53,6 +54,8 @@ def polling_thread():
                     regs[500 + i] = reg_list_5[i]
                 for i in range(0, 100):
                     regs[600 + i] = reg_list_6[i]
+                for i in range(0, 100):
+                    regs[700 + i] = reg_list_7[i]
 
                 while stack_of_writable_register:
                     regs_addr, regs_values = stack_of_writable_register.pop()
