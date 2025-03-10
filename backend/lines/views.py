@@ -12,11 +12,13 @@ from .work_with_data import (get_data_in_select_date, get_departments, get_depar
 
 menu = [{'title': "Данные за день", 'url_name': 'home'},
         {'title': "Статистика за месяц", 'url_name': 'statistic'},
+        {'title': "Статистика за год", 'url_name': 'statistics_for_the_year'},
         {'title': "", 'url_name': 'tuning'},
 ]
 
 menu_ppk = [{'title': "Данные за день ППК", 'url_name': 'data_in_day_ppk'},
         {'title': "Статистика за месяц ППК", 'url_name': 'statistic_ppk'},
+        {'title': "Статистика за год ППК", 'url_name': 'statistics_for_the_year_ppk'},
         {'title': "", 'url_name': 'tuning'},
 ]
 
@@ -129,6 +131,62 @@ def statistic_ppk(request):
         'times': times,
     }
     return render(request, 'lines/statistic.html', context=data)
+
+
+def statistics_for_the_year(request):
+    made_kabel_in_days = []
+    times = []
+    lines = get_lines_from_base()
+    if request.method == 'POST':
+        form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
+        if form.is_valid():
+            calendar_date = form.cleaned_data.get('start_day', None)
+            start_date = dt.date(year=calendar_date.year,
+                                 month=calendar_date.month,
+                                 day=1)
+            times, made_kabel_in_days = get_statistics_select_period(start_date)
+    else:
+        form = ReadAndSaveLinesStatistic()
+
+    departments = get_departments(lines)
+    out_department = get_sorted_departments_statistic(departments, made_kabel_in_days)
+
+    data = {
+        'title': 'КМВ - Статистика за год',
+        'menu': menu,
+        'departments': out_department,
+        'form': form,
+        'times': times,
+    }
+    return render(request, 'lines/statistics_for_the_year.html', context=data)
+
+
+def statistics_for_the_year_ppk(request):
+    made_kabel_in_days = []
+    times = []
+    lines = get_lines_from_base()
+    if request.method == 'POST':
+        form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
+        if form.is_valid():
+            calendar_date = form.cleaned_data.get('start_day', None)
+            start_date = dt.date(year=calendar_date.year,
+                                 month=calendar_date.month,
+                                 day=1)
+            times, made_kabel_in_days = get_statistics_select_period(start_date)
+    else:
+        form = ReadAndSaveLinesStatistic()
+
+    departments = get_departments_ppk(lines)
+    out_department = get_sorted_departments_statistic(departments, made_kabel_in_days)
+
+    data = {
+        'title': 'КМВ - Статистика за год ППК',
+        'menu': menu_ppk,
+        'departments': out_department,
+        'form': form,
+        'times': times,
+    }
+    return render(request, 'lines/statistics_for_the_year.html', context=data)
 
 
 def tuning(request):
