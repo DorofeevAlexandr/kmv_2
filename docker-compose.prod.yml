@@ -57,6 +57,9 @@ services:
       - ./.env.prod
     volumes:
       - data_base_csv:/var/data_base_csv
+    devices:
+      - "/dev/ttyS0:/dev/ttyS0"
+      - "/dev/ttyS1:/dev/ttyS1"
 
   ftp:
     image: fauria/vsftpd:latest
