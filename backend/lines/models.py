@@ -46,6 +46,7 @@ class Lines(models.Model):
 
 class LinesCurrentParams(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
+    line_number = models.IntegerField(blank=True, null=True, unique=True)
     connection_counter = models.BooleanField(blank=True, null=True)
     indicator_value = models.IntegerField(blank=True, null=True)
     length = models.FloatField(blank=True, null=True)

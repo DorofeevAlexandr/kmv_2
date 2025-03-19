@@ -9,6 +9,7 @@ from .forms import (ReadDataCounters, ReadAndSaveLinesStatistic)
 from .work_with_data import (get_data_in_select_date, get_departments, get_departments_ppk,
                              get_lines_from_base, get_sorted_departments_data, get_sorted_departments_statistic,
                              get_statistics_select_period, change_speed_lines)
+from .models import Lines, LinesCurrentParams
 
 menu = [{'title': "Данные за день", 'url_name': 'home'},
         {'title': "Статистика за месяц", 'url_name': 'statistic'},
@@ -189,13 +190,42 @@ def statistics_for_the_year_ppk(request):
     return render(request, 'lines/statistics_for_the_year.html', context=data)
 
 
-def tuning(request):
+def get_lines_params_from_base():
+    out_lines = []
+    lines = Lines.objects.order_by('line_number')
+    # lines_current_params = LinesCurrentParams.objects.order_by('id')
+    # print(*lines_current_params)
+    # filds = LinesCurrentParams._meta
+    for line in lines:
+        # print(line)
+        line_number = line.line_number
+        # print(line_number)
+        # line_current_params = filter(lambda l: l.line_number==line_number, lines_current_params)
+        line_current_params = LinesCurrentParams.objects.get(line_number=int(line_number))
+        # print(line_current_params.__repr__())
+        out_lines.append({'line_number': line.line_number,
+                            'name': line.name,
+                            'modbus_adr': line.modbus_adr,
+                            'pseudonym': line.pseudonym ,
+                            'port': line.port,
+                            'department': line.department,
+                            'number_of_display': line.number_of_display,
+                            'k': line.k,
+                            'indicator_value': line_current_params.indicator_value,
+                            'length': line_current_params.length,
+                            'speed_line': line_current_params.speed_line,
+                          })
+    return  out_lines
 
+
+def tuning(request):
+    lines = get_lines_params_from_base()
     data = {
-        'title': 'КМВ',
-         'menu': menu,
+        'title': 'КМВ - настройка',
+        'menu': menu,
+        'lines': lines,
     }
-    return render(request, 'lines/index.html', context=data)
+    return render(request, 'lines/tuning.html', context=data)
 
 
 def about(request):
