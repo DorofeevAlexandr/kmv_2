@@ -2,7 +2,7 @@ import datetime as dt
 
 
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.template.loader import render_to_string
 from .forms import (ReadDataCounters, ReadAndSaveLinesStatistic)
@@ -193,16 +193,9 @@ def statistics_for_the_year_ppk(request):
 def get_lines_params_from_base():
     out_lines = []
     lines = Lines.objects.order_by('line_number')
-    # lines_current_params = LinesCurrentParams.objects.order_by('id')
-    # print(*lines_current_params)
-    # filds = LinesCurrentParams._meta
     for line in lines:
-        # print(line)
         line_number = line.line_number
-        # print(line_number)
-        # line_current_params = filter(lambda l: l.line_number==line_number, lines_current_params)
-        line_current_params = LinesCurrentParams.objects.get(line_number=int(line_number))
-        # print(line_current_params.__repr__())
+        line_current_params = get_object_or_404(LinesCurrentParams, line_number=line_number)
         out_lines.append({'line_number': line.line_number,
                             'name': line.name,
                             'modbus_adr': line.modbus_adr,
@@ -214,6 +207,7 @@ def get_lines_params_from_base():
                             'indicator_value': line_current_params.indicator_value,
                             'length': line_current_params.length,
                             'speed_line': line_current_params.speed_line,
+                            'line_url': line.get_absolute_url(),
                           })
     return  out_lines
 
@@ -232,8 +226,18 @@ def about(request):
     return render(request, 'lines/about.html')
 
 
-def categories(request, cat_id):
-    return HttpResponse(f"<h1>Статьи по категориям</h1><p>id: {cat_id}</p>")
+def show_line(request, line_number):
+    line = get_object_or_404(Lines, line_number=line_number)
+    line_current_params = get_object_or_404(LinesCurrentParams, line_number=line_number)
+    data = {
+        'title': 'КМВ - настройка',
+        'menu': menu,
+        'line': line,
+        'line_current_params': line_current_params,
+    }
+    return render(request, 'lines/line.html', context=data)
+
+
 
 
 def categories_by_slug(request, cat_slug):

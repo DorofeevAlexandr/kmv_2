@@ -25,15 +25,15 @@
             <tr>
                 <th>{{l.line_number}}</th>
                 <td>{{l.modbus_adr}}</td>
-                <td>{{l.pseudonym}}</td>
+                <td> <a href="{{ l.line_url }}"> {{l.pseudonym}} </a> </td>
                 <td>{{l.indicator_value}}</td>
                 <td>{{l.length}}</td>
                 <td>{{l.k}}</td>
                 <td>{{l.speed_line}}</td>
             </tr>
-
         {% endfor %}
     </table>
+
 </div>
 
 </ul>
