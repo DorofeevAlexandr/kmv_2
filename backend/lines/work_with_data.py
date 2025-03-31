@@ -301,7 +301,7 @@ def get_data_in_select_date(select_date: dt.datetime):
     # print(speed_lines)
 
     lines_statistic = get_lines_statistic(speed_lines)
-    change_lines_statistic(lines_statistic)
+    # change_lines_statistic(lines_statistic)
     smale_speed_lines = get_smale_speed_lines(speed_lines)
     change_speed_lines(smale_speed_lines)
     time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
