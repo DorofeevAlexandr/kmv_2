@@ -158,6 +158,10 @@ def get_lines_statistic(speed_lines):
             if smena == 2:
                 line_statistic['made_kabel_2'] += metr_in_minute
 
+        line_statistic['kmv'] = f"{(line_statistic['count_minute_line_run'] / 1440) :6.3f}"
+        line_statistic['kmv_1'] = f"{(line_statistic['count_minute_line_run_1'] / 720) :6.3f}"
+        line_statistic['kmv_2'] = f"{(line_statistic['count_minute_line_run_2'] / 720) :6.3f}"
+
         line_statistic['average_speed'] = str_average_speed(line_statistic['made_kabel'], line_statistic['count_minute_line_run'])
         line_statistic['average_speed_1'] = str_average_speed(line_statistic['made_kabel_1'], line_statistic['count_minute_line_run_1'])
         line_statistic['average_speed_2'] = str_average_speed(line_statistic['made_kabel_2'], line_statistic['count_minute_line_run_2'])
