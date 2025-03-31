@@ -297,7 +297,7 @@ def get_data_in_select_date(select_date: dt.datetime):
     # print(speed_lines)
 
     lines_statistic = get_lines_statistic(speed_lines)
-    # change_lines_statistic(lines_statistic)
+    change_lines_statistic(lines_statistic)
     smale_speed_lines = get_smale_speed_lines(speed_lines)
     change_speed_lines(smale_speed_lines)
     time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
@@ -320,8 +320,15 @@ def get_sorted_departments_data(departments, lines_statistic, smale_speed_lines)
     return out_department
 
 
-def get_statistics_select_period(start_date: dt.date):
-    end_date = start_date + relativedelta(months=1)
+def get_lines_statistic_for_date(date: dt.date):
+    counters_values = get_counters_values_from_base(date)
+    speed_lines = get_speed_lines(counters_values)
+    antialiasing_speed_value(speed_lines)
+    return get_lines_statistic(speed_lines)
+
+
+def get_statistics_select_period(start_date: dt.date, step_months=1):
+    end_date = start_date + relativedelta(months = step_months)
 
     made_kabel_in_days = []
     times = []
@@ -332,11 +339,7 @@ def get_statistics_select_period(start_date: dt.date):
         times = []
         while cur_date < end_date:
             # print(cur_date)
-            counters_values = get_counters_values_from_base(cur_date)
-            speed_lines = get_speed_lines(counters_values)
-            antialiasing_speed_value(speed_lines)
-            lines_statistic = get_lines_statistic(speed_lines)
-            made_kabel_in_days.append([int(float(ls['made_kabel'])) for ls in lines_statistic])
+            made_kabel_in_days.append([int(float(ls['made_kabel'])) for ls in get_lines_statistic_for_date(cur_date)])
             times.append(cur_date)
 
             cur_date = cur_date + dt.timedelta(days=1)
