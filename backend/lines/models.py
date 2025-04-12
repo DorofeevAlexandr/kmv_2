@@ -19,6 +19,20 @@ class Counters(models.Model):
         return str(self.time)
 
 
+class LinesStatistics(models.Model):
+    id = models.IntegerField(primary_key=True, editable=False)
+    date = models.DateTimeField()
+    made_kabel = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'lines_statistics'
+        verbose_name = 'Статистика'
+        verbose_name_plural = 'Статистика'
+
+    def __str__(self):
+        return str(self.date)
+
 
 class Lines(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
