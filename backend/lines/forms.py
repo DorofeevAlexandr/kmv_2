@@ -19,6 +19,6 @@ class ReadAndSaveLinesStatistic(forms.Form):
     start_day = forms.DateField(initial=dt.date.today,
                           label="Выберите месяц",
                           required=True,
-                          widget=forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
-                          input_formats=["%Y-%m-%d"]
+                          widget=forms.DateInput(format="%Y-%m", attrs={"type": "month"}),
+                          input_formats=["%Y-%m"]
                           )
