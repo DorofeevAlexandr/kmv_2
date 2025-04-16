@@ -28,7 +28,7 @@ class SelectYearLinesStatistic(forms.Form):
     select_year = forms.IntegerField(initial=dt.date.today().year,
                           label="Выберите год",
                           required=True,
-                          max_value = dt.date.today().year+1,
+                          max_value = dt.date.today().year,
                           min_value = 2024,
                           step_size = 1,
                           )
