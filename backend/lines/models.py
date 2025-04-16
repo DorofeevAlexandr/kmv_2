@@ -20,7 +20,7 @@ class Counters(models.Model):
 
 
 class LinesStatistics(models.Model):
-    id = models.IntegerField(primary_key=True, editable=False)
+    # id = models.IntegerField(primary_key=True, editable=False)
     date = models.DateTimeField()
     made_kabel = models.TextField(blank=True, null=True)
 

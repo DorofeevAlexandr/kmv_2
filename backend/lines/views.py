@@ -1,25 +1,28 @@
 import datetime as dt
+from dateutil.relativedelta import relativedelta
+import locale
 
 
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.template.loader import render_to_string
-from .forms import (ReadDataCounters, ReadAndSaveLinesStatistic)
+from .forms import (ReadDataCounters, ReadAndSaveLinesStatistic, SelectYearLinesStatistic)
 from .work_with_data import (get_data_in_select_date, get_departments, get_departments_ppk,
                              get_lines_from_base, get_sorted_departments_data, get_sorted_departments_statistic,
-                             get_statistics_select_period, change_speed_lines)
+                             get_statistics_select_period, get_statistics_select_period_and_wr_base,
+                             get_made_kabel_in_cur_month)
 from .models import Lines, LinesCurrentParams
 
 menu = [{'title': "Данные за день", 'url_name': 'home'},
         {'title': "Статистика за месяц", 'url_name': 'statistic'},
-        # {'title': "Статистика за год", 'url_name': 'statistics_for_the_year'},
+        {'title': "Статистика за год", 'url_name': 'statistics_for_the_year'},
         {'title': "", 'url_name': 'tuning'},
 ]
 
 menu_ppk = [{'title': "Данные за день ППК", 'url_name': 'data_in_day_ppk'},
         {'title': "Статистика за месяц ППК", 'url_name': 'statistic_ppk'},
-        # {'title': "Статистика за год ППК", 'url_name': 'statistics_for_the_year_ppk'},
+        {'title': "Статистика за год ППК", 'url_name': 'statistics_for_the_year_ppk'},
         {'title': "", 'url_name': 'tuning'},
 ]
 
@@ -89,7 +92,7 @@ def statistic(request):
             start_date = dt.date(year=calendar_date.year,
                                  month=calendar_date.month,
                                  day=1)
-            times, made_kabel_in_days = get_statistics_select_period(start_date)
+            times, made_kabel_in_days = get_statistics_select_period_and_wr_base(start_date)
     else:
         form = ReadAndSaveLinesStatistic()
 
@@ -117,7 +120,7 @@ def statistic_ppk(request):
             start_date = dt.date(year=calendar_date.year,
                                  month=calendar_date.month,
                                  day=1)
-            times, made_kabel_in_days = get_statistics_select_period(start_date)
+            times, made_kabel_in_days = get_statistics_select_period_and_wr_base(start_date)
     else:
         form = ReadAndSaveLinesStatistic()
 
@@ -135,22 +138,30 @@ def statistic_ppk(request):
 
 
 def statistics_for_the_year(request):
-    made_kabel_in_days = []
+    made_kabel_in_months = []
     times = []
     lines = get_lines_from_base()
     if request.method == 'POST':
-        form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
+        form = SelectYearLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
-            calendar_date = form.cleaned_data.get('start_day', None)
-            start_date = dt.date(year=calendar_date.year,
-                                 month=calendar_date.month,
+            select_year = form.cleaned_data.get('select_year', None)
+            start_date = dt.date(year=select_year,
+                                 month=1,
                                  day=1)
-            times, made_kabel_in_days = get_statistics_select_period(start_date)
+            end_date = start_date + relativedelta(months=12)
+            cur_date = start_date
+            locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+
+            while cur_date < end_date:
+                made_kabel_in_cur_month = get_made_kabel_in_cur_month(cur_date)
+                made_kabel_in_months.append(made_kabel_in_cur_month)
+                times.append(cur_date.strftime("%b %Y"))
+                cur_date += relativedelta(months=1)
     else:
-        form = ReadAndSaveLinesStatistic()
+        form = SelectYearLinesStatistic()
 
     departments = get_departments(lines)
-    out_department = get_sorted_departments_statistic(departments, made_kabel_in_days)
+    out_department = get_sorted_departments_statistic(departments, made_kabel_in_months)
 
     data = {
         'title': 'КМВ - Статистика за год',

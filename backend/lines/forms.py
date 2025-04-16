@@ -22,3 +22,29 @@ class ReadAndSaveLinesStatistic(forms.Form):
                           widget=forms.DateInput(format="%Y-%m", attrs={"type": "month"}),
                           input_formats=["%Y-%m"]
                           )
+
+
+class SelectYearLinesStatistic(forms.Form):
+    select_year = forms.IntegerField(initial=dt.date.today().year,
+                          label="Выберите год",
+                          required=True,
+                          max_value = dt.date.today().year+1,
+                          min_value = 2024,
+                          step_size = 1,
+                          )
+
+
+#
+# class LineParamsUpdate(forms.Form):
+#     line_number = forms.IntegerField(unique=True)
+#     name = forms.CharField(unique=True, max_length=1)
+#     pseudonym = forms.CharField(unique=True, max_length=1)
+#     port = forms.CharField(max_length=1)
+#     modbus_adr = forms.IntegerField()
+#     department = forms.IntegerField()
+#     number_of_display = forms.IntegerField()
+#     cable_number = forms.IntegerField()
+#     cable_connection_number = forms.IntegerField()
+#     k = forms.FloatField()
+#     created_dt = forms.DateTimeField(blank=True, null=True)
+#     description = forms.CharField(blank=True, null=True)

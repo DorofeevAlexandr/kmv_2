@@ -1,8 +1,10 @@
 import datetime as dt
+from django.shortcuts import get_object_or_404
 from calendar import month, Month
 from os import times
 from dateutil.relativedelta import relativedelta
-from .models import Counters, Lines
+import operator
+from .models import Counters, Lines, LinesStatistics
 
 
 COUNT_LINES = 70
@@ -343,7 +345,55 @@ def get_statistics_select_period(start_date: dt.date, step_months=1):
         times = []
         while cur_date < end_date:
             # print(cur_date)
-            made_kabel_in_days.append([int(float(ls['made_kabel'])) for ls in get_lines_statistic_for_date(cur_date)])
+            made_kabel_in_days.append([int(float(ls['made_kabel']) * 1000) for ls in get_lines_statistic_for_date(cur_date)])
+            times.append(cur_date)
+
+            cur_date = cur_date + dt.timedelta(days=1)
+        # print(made_kabel_in_days)
+    return times, made_kabel_in_days
+
+
+def save_made_kabel_in_base(cur_date: dt.date, made_kabel: list):
+    m_k = LinesStatistics()
+    m_k.date = cur_date
+    m_k.made_kabel = '{' + ', '.join(map(str, made_kabel)) + '}'
+    m_k.save()
+
+
+def create_zero_values_counters():
+    return  [0 for _ in range(COUNT_LINES)]
+
+
+def get_made_kabel_in_cur_month(cur_date: dt.date):
+    t, made_kabel_in_days = get_statistics_select_period_and_wr_base(cur_date, step_months=1)
+    made_kabel_in_cur_month = create_zero_values_counters()
+    for made_kabel_in_day in made_kabel_in_days:
+        made_kabel_in_cur_month = list(map(operator.add, made_kabel_in_cur_month, made_kabel_in_day))
+    # print(made_kabel_in_cur_month)
+    return made_kabel_in_cur_month
+
+
+def get_statistics_select_period_and_wr_base(start_date: dt.date, step_months=1):
+    end_date = start_date + relativedelta(months = step_months)
+    made_kabel_in_days = []
+    times = []
+    if start_date:
+        cur_date = start_date
+        made_kabel_in_days = []
+        times = []
+        while cur_date < end_date:
+            if cur_date < dt.date.today():
+                if LinesStatistics.objects.filter(date=cur_date).order_by('-date').exists():
+                    m_k = get_object_or_404(LinesStatistics, date=cur_date)
+                    made_kabel = m_k.made_kabel
+                else:
+                    made_kabel = [int(float(ls['made_kabel']) * 1000) for ls in get_lines_statistic_for_date(cur_date)]
+                    save_made_kabel_in_base(cur_date, made_kabel)
+            elif cur_date == dt.date.today():
+                made_kabel = [int(float(ls['made_kabel']) * 1000) for ls in get_lines_statistic_for_date(cur_date)]
+            else:
+                made_kabel = create_zero_values_counters()
+            made_kabel_in_days.append(made_kabel)
             times.append(cur_date)
 
             cur_date = cur_date + dt.timedelta(days=1)
@@ -359,8 +409,10 @@ def get_sorted_departments_statistic(departments, made_kabel_in_days):
             n = line['line_number']
             if made_kabel_in_days:
                 made_kabel = [day_values[n - 1] for day_values in  made_kabel_in_days]
+                sum_made_kabel = sum(made_kabel) / 1000
+                made_kabel = [int(value / 1000) for value in made_kabel]
                 out_lines.append({**line,
-                                  'sum_made_kabel': sum(made_kabel),
+                                  'sum_made_kabel': sum_made_kabel,
                                   'made_kabel': made_kabel} )
         out_department.append(out_lines)
     return out_department
