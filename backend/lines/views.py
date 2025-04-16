@@ -175,25 +175,34 @@ def statistics_for_the_year(request):
 
 
 def statistics_for_the_year_ppk(request):
-    made_kabel_in_days = []
+    made_kabel_in_months = []
     times = []
     lines = get_lines_from_base()
+    select_year = dt.date.today().year
     if request.method == 'POST':
-        form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
+        form = SelectYearLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
-            calendar_date = form.cleaned_data.get('start_day', None)
-            start_date = dt.date(year=calendar_date.year,
-                                 month=calendar_date.month,
+            select_year = form.cleaned_data.get('select_year', None)
+            start_date = dt.date(year=select_year,
+                                 month=1,
                                  day=1)
-            times, made_kabel_in_days = get_statistics_select_period(start_date)
+            end_date = start_date + relativedelta(months=12)
+            cur_date = start_date
+            locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+
+            while cur_date < end_date:
+                made_kabel_in_cur_month = get_made_kabel_in_cur_month(cur_date)
+                made_kabel_in_months.append(made_kabel_in_cur_month)
+                times.append(cur_date.strftime("%b %Y"))
+                cur_date += relativedelta(months=1)
     else:
-        form = ReadAndSaveLinesStatistic()
+        form = SelectYearLinesStatistic()
 
     departments = get_departments_ppk(lines)
-    out_department = get_sorted_departments_statistic(departments, made_kabel_in_days)
+    out_department = get_sorted_departments_statistic(departments, made_kabel_in_months)
 
     data = {
-        'title': 'КМВ - Статистика за год ППК',
+        'title': f'КМВ - Статистика за {str(select_year)} год ППК',
         'menu': menu_ppk,
         'departments': out_department,
         'form': form,
