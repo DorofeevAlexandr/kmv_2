@@ -141,6 +141,7 @@ def statistics_for_the_year(request):
     made_kabel_in_months = []
     times = []
     lines = get_lines_from_base()
+    select_year = dt.date.today().year
     if request.method == 'POST':
         form = SelectYearLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
@@ -164,7 +165,7 @@ def statistics_for_the_year(request):
     out_department = get_sorted_departments_statistic(departments, made_kabel_in_months)
 
     data = {
-        'title': 'КМВ - Статистика за год',
+        'title': f'КМВ - Статистика за {str(select_year)} год',
         'menu': menu,
         'departments': out_department,
         'form': form,
