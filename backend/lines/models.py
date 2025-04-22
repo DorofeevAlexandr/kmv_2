@@ -56,7 +56,7 @@ class Lines(models.Model):
         verbose_name_plural = 'Линии'
 
     def __str__(self):
-        return f'{self.id} - {self.name} - {self.pseudonym}'
+        return f'{self.id} - {self.name} - {self.pseudonym} - k = {self.k}'
 
     def get_absolute_url(self):
         return reverse('line', kwargs={'line_number': self.line_number})

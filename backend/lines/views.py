@@ -3,11 +3,12 @@ from dateutil.relativedelta import relativedelta
 import locale
 
 
+from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.template.loader import render_to_string
-from .forms import (ReadDataCounters, ReadAndSaveLinesStatistic, SelectYearLinesStatistic)
+from .forms import (ReadDataCounters, ReadAndSaveLinesStatistic, SelectYearLinesStatistic, LineParamsKUpdateForm)
 from .work_with_data import (get_data_in_select_date, get_departments, get_departments_ppk,
                              get_lines_from_base, get_sorted_departments_data, get_sorted_departments_statistic,
                              get_statistics_select_period, get_statistics_select_period_and_wr_base,
@@ -26,6 +27,11 @@ menu_ppk = [{'title': "Данные за день ППК", 'url_name': 'data_in_
         {'title': "", 'url_name': 'tuning'},
 ]
 
+menu_tuning = [{'title': "Данные за день", 'url_name': 'home'},
+        {'title': "Статистика за месяц", 'url_name': 'statistic'},
+        {'title': "Статистика за год", 'url_name': 'statistics_for_the_year'},
+        {'title': "Настройка", 'url_name': 'tuning'},
+]
 
 def index(request):
     smale_speed_lines = []
@@ -237,7 +243,7 @@ def tuning(request):
     lines = get_lines_params_from_base()
     data = {
         'title': 'КМВ - настройка',
-        'menu': menu,
+        'menu': menu_tuning,
         'lines': lines,
     }
     return render(request, 'lines/tuning.html', context=data)
@@ -247,32 +253,30 @@ def about(request):
     return render(request, 'lines/about.html')
 
 
-def show_line(request, line_number):
+def update_line(request, line_number):
     line = get_object_or_404(Lines, line_number=line_number)
     line_current_params = get_object_or_404(LinesCurrentParams, line_number=line_number)
+    if request.method == 'POST':
+        form = LineParamsKUpdateForm(request.POST)
+        if form.is_valid():
+            try:
+                # line.objects.create(**form.cleaned_data)
+                update_line = Lines.objects.filter(line_number=line_number).get()
+                update_line.k = form.cleaned_data['k']
+                update_line.save(update_fields=['k'])
+                return redirect('tuning')
+            except:
+                form.add_error(None, "Ошибка обновления параметров линии")
+    else:
+        form = LineParamsKUpdateForm(initial=model_to_dict(line))
     data = {
-        'title': 'КМВ - настройка',
-        'menu': menu,
+        'title': f'КМВ - настройка линии № {int(line_number)}' ,
+        'menu': menu_tuning,
         'line': line,
         'line_current_params': line_current_params,
+        'form': form,
     }
     return render(request, 'lines/line.html', context=data)
-
-
-
-
-def categories_by_slug(request, cat_slug):
-    if request.POST:
-        print(request.POST)
-    return HttpResponse(f"<h1>Статьи по категориям</h1><p>slug: {cat_slug}</p>")
-
-
-def archive(request, year):
-    if year > 2023:
-        uri = reverse('cats', args=('sport', ))
-        return HttpResponsePermanentRedirect(uri)
-
-    return HttpResponse(f"<h1>Архив по годам</h1><p>{year}</p>")
 
 
 def page_not_found(request, exception):

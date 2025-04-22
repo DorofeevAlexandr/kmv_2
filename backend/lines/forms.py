@@ -34,17 +34,43 @@ class SelectYearLinesStatistic(forms.Form):
                           )
 
 
-#
-# class LineParamsUpdate(forms.Form):
-#     line_number = forms.IntegerField(unique=True)
-#     name = forms.CharField(unique=True, max_length=1)
-#     pseudonym = forms.CharField(unique=True, max_length=1)
-#     port = forms.CharField(max_length=1)
-#     modbus_adr = forms.IntegerField()
-#     department = forms.IntegerField()
-#     number_of_display = forms.IntegerField()
-#     cable_number = forms.IntegerField()
-#     cable_connection_number = forms.IntegerField()
-#     k = forms.FloatField()
-#     created_dt = forms.DateTimeField(blank=True, null=True)
-#     description = forms.CharField(blank=True, null=True)
+class LineParamsKUpdateForm(forms.Form):
+    # line_number = forms.IntegerField(required=True,
+    #                                  min_value=1,
+    #                                  max_value=255)
+    # name =  forms.CharField(max_length=255,
+    #                         label="Название линии",
+    #                         required=True,
+    #                         widget=forms.TextInput(attrs={'class': 'form-input'}),
+    #                         )
+    # pseudonym =  forms.CharField(max_length=255,
+    #                         label="Название линии",
+    #                         required=True,
+    #                         widget=forms.TextInput(attrs={'class': 'form-input'}),
+    #                         )
+    # port =  forms.CharField(max_length=255,
+    #                         label="Порт",
+    #                         required=True,
+    #                         widget=forms.TextInput(attrs={'class': 'form-input'}),
+    #                         )
+    # modbus_adr = forms.IntegerField(required=True,
+    #                                  min_value=1,
+    #                                  max_value=255)
+    # department = forms.IntegerField(required=True,
+    #                                  min_value=1,
+    #                                  max_value=255)
+    # number_of_display = forms.IntegerField(required=True,
+    #                                  min_value=0,
+    #                                  max_value=255)
+    # cable_number = forms.IntegerField(required=True,
+    #                                  min_value=0,
+    #                                  max_value=255)
+    # cable_connection_number = forms.IntegerField(required=True,
+    #                                  min_value=0,
+    #                                  max_value=255)
+    k = forms.FloatField(required=True,
+                         min_value=0,
+                         step_size=0.000000000000000001,
+                         )
+    # created_dt = forms.DateTimeField(blank=True, null=True)
+    # description = forms.CharField(blank=True, null=True)
