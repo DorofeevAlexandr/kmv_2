@@ -14,4 +14,5 @@ urlpatterns = [
     path('statistics_for_the_year_ppk', views.statistics_for_the_year_ppk, name='statistics_for_the_year_ppk'),
     path('tuning', views.tuning, name='tuning'),
     path('line/<int:line_number>/', views.update_line, name='line'),
+    path('connection_with_counters', views.connection_with_counters, name='connection_with_counters'),
 ]

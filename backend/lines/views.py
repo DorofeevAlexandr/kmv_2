@@ -12,7 +12,7 @@ from .forms import (ReadDataCounters, ReadAndSaveLinesStatistic, SelectYearLines
 from .work_with_data import (get_data_in_select_date, get_departments, get_departments_ppk,
                              get_lines_from_base, get_sorted_departments_data, get_sorted_departments_statistic,
                              get_statistics_select_period, get_statistics_select_period_and_wr_base,
-                             get_made_kabel_in_cur_month)
+                             get_made_kabel_in_cur_month, get_counters_conections_from_base)
 from .models import Lines, LinesCurrentParams
 
 menu = [{'title': "Данные за день", 'url_name': 'home'},
@@ -30,6 +30,7 @@ menu_ppk = [{'title': "Данные за день ППК", 'url_name': 'data_in_
 menu_tuning = [{'title': "Данные за день", 'url_name': 'home'},
         {'title': "Статистика за месяц", 'url_name': 'statistic'},
         {'title': "Статистика за год", 'url_name': 'statistics_for_the_year'},
+        {'title': "Связь со счетчиками", 'url_name': 'connection_with_counters'},
         {'title': "Настройка", 'url_name': 'tuning'},
 ]
 
@@ -277,6 +278,37 @@ def update_line(request, line_number):
         'form': form,
     }
     return render(request, 'lines/line.html', context=data)
+
+
+def connection_with_counters(request):
+    lines_connections = []
+    time = []
+    lines = get_lines_from_base()
+    if request.method == 'POST':
+        form = ReadDataCounters(request.POST, request.FILES)
+        if form.is_valid():
+            select_date = form.cleaned_data.get('day', None)
+            if select_date:
+                lines_connections = get_counters_conections_from_base(select_date)
+                time = [dt.time(hour=((n // 60) + 8) % 24, minute=(n % 60)) for n, connection in
+                        enumerate(lines_connections[0])]
+    else:
+        form = ReadDataCounters()
+
+    for l in lines:
+        try:
+            l['lines_connections'] = lines_connections[l['line_number']]
+        except:
+            l['lines_connections'] = []
+
+    data = {
+        'title': 'КМВ - Связь со счетчиками',
+        'lines': lines,
+        'form': form,
+        'times': time,
+        'menu': menu_tuning,
+    }
+    return render(request, 'lines/lines_connections.html', context=data)
 
 
 def page_not_found(request, exception):

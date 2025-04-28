@@ -43,6 +43,43 @@ def get_counters_values_from_base(date: dt.date):
     return  length_in_minute
 
 
+def get_counters_conections_from_base(date: dt.date):
+    dtime_8_hours = dt.timedelta(hours=8)
+    dtime_1_days = dt.timedelta(days=1)
+    time_start = dt.datetime(year=date.year,
+                             month=date.month,
+                             day=date.day,
+                             hour=0,
+                             minute=0,
+                             second=0) + dtime_8_hours
+    time_end = time_start + dtime_1_days
+    conections = Counters.objects.filter(time__range=[time_start, time_end]).order_by('-time')
+
+    conections_in_minute = [[] for _ in range(1441)]
+
+    for c in conections:
+        minutes = (c.time - time_start).seconds // 60
+        conections_in_minute[minutes] = c.connection_counters
+    return  transposition_conections(conections_in_minute)
+
+
+def transposition_conections(conections_in_minute):
+    transp_conections = [[0 for _ in range(1441)] for _ in range(COUNT_LINES)]
+
+    for n_minute in range(1, 1441):
+        conection_lines = conections_in_minute[n_minute]
+        for n_line, conection in enumerate(conection_lines):
+            try:
+                if conections_in_minute[n_minute][n_line]:
+                    transp_conections[n_line][n_minute] = 1
+                else:
+                    transp_conections[n_line][n_minute] = 0
+            except:
+                transp_conections[n_line][n_minute] = 0
+
+    return transp_conections
+
+
 def get_speed_lines(length_in_minute):
     speed_lines = [[0 for _ in range(1441)] for _ in range(COUNT_LINES)]
 
