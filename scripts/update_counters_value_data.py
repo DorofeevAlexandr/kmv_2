@@ -42,7 +42,7 @@ class PostgresDataUpdater:
             length = counter[2]
             if len(length) >= line_number:
                 length[line_number-1] = int(float(length[line_number-1]) * k)
-                counter[2][1] = dt.datetime.now().second
+
                 print(counter)
                 self.update_record(id=id,
                                    lengths=length)
@@ -65,17 +65,17 @@ if __name__ == '__main__':
            'user':  os.environ.get('DB_USER'),
            'password': os.environ.get('DB_PASSWORD'),
            #'host': os.environ.get('DB_HOST', 'db'),
-           # 'host': '192.168.0.246',
-           'host': 'localhost',
+           'host': '192.168.0.246',
+           # 'host': 'localhost',
            'port': 5432,
            }
     with psycopg2.connect(**dsl, cursor_factory=DictCursor) as connection:
         print(connection)
         pdl = PostgresDataUpdater(connection)
         pdl.update_counters_record(table_name='counters',
-                                 time_start=dt.datetime(2024, 12, 1, 10, 10, 0),
-                                 time_end=dt.datetime(2024, 12, 10, 15, 50, 0),
-                                 line_number=1,
-                                 k=1.0
+                                 time_start=dt.datetime(2025, 4, 7, 10, 10, 0),
+                                 time_end=dt.datetime(2025, 4, 28, 21, 50, 0),
+                                 line_number=2,
+                                 k=0.09802400846783833
                                 )
         print('Записей в таблице counters  = ', pdl.count_records('counters'))
