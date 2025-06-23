@@ -32,4 +32,6 @@
     docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
 ---
 
+docker exec -it kmv_2-db-1 psql -U username lines_database 
+
 
