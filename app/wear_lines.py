@@ -2,7 +2,8 @@ from datetime import datetime
 
 from models import Lines, LinesCurrentParams, Counters
 from read_counter import (read_input_registers_modbus_device, get_connection, get_indicator_value,
-                          get_plc_indicator_value, get_plc_connection, get_plc_diskret_input_counters)
+                          get_plc_indicator_value, get_plc_connection, get_plc_diskret_input_counters,
+                          read_discrete_inputs_modbus_device)
 
 
 COUNTER_SIMULATION = False
@@ -35,6 +36,17 @@ def read_serial_port_counters(session, lines_params):
                                                            slave_adr=line['modbus_adr'])
             ind_value = get_indicator_value(registers)
             conected = get_connection(registers)
+            # Исключение для вальцов
+            if line['line_number'] == 57:
+                registers = read_discrete_inputs_modbus_device(port=port,
+                                                               slave_adr=line['modbus_adr'])
+                if registers:
+                    try:
+                        ind_value = 1 if (registers[0] != 0 or registers[1] != 0) else 0
+                    except:
+                        ind_value = 0
+                else:
+                    ind_value = 0
 
         length = ind_value * line['k'] 
         update_line_in_base(session, line,

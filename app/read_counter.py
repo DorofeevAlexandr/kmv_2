@@ -41,10 +41,44 @@ def read_input_registers_modbus_device(port='/dev/ttyS0', slave_adr=16,
         # THIS IS NOT A PYTHON EXCEPTION, but a valid modbus message
         client.close()
         return
-    print(rr.registers)
+    # print(rr.registers)
     client.close()
     return rr.registers
 
+def read_discrete_inputs_modbus_device(port='/dev/ttyS0', slave_adr=57,
+                                       offset=0, length=2):
+    client = ModbusSerialClient(
+        method='rtu',
+        port=port,
+        baudrate=9600,
+        framer=ModbusRtuFramer,
+        timeout=2,
+        retries=3,
+        retry_on_empty=False,
+        close_comm_on_error=False,
+        strict=True,
+        bytesize=8,
+        parity="N",
+        stopbits=1,
+        handle_local_echo=False,
+    )
+
+    client.connect()
+    try:
+        rr = client.read_discrete_inputs(offset, length, slave=slave_adr)
+    except ModbusException as exc:
+        client.close()
+        return
+    if rr.isError():
+        client.close()
+        return
+    if isinstance(rr, ExceptionResponse):
+        # THIS IS NOT A PYTHON EXCEPTION, but a valid modbus message
+        client.close()
+        return
+    # print(rr.registers)
+    client.close()
+    return rr.registers
 
 def get_indicator_value(registers):
     try:
