@@ -66,9 +66,9 @@ def read_discrete_inputs_modbus_device(port='/dev/ttyS0', slave_adr=57,
     client.connect()
     try:
         rr = client.read_discrete_inputs(offset, length, slave=slave_adr)
-        print(offset, length, slave_adr)
-        print(rr)
-        print(rr.bits)
+        # print(offset, length, slave_adr)
+        # print(rr)
+        # print(rr.bits)
     except ModbusException as exc:
         client.close()
         return
