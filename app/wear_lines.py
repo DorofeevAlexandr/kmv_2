@@ -38,12 +38,12 @@ def read_serial_port_counters(session, lines_params):
             conected = get_connection(registers)
             # Исключение для вальцов
             if line['line_number'] == 57:
-                registers = read_discrete_inputs_modbus_device(port=port,
+                bits = read_discrete_inputs_modbus_device(port=port,
                                                                slave_adr=line['modbus_adr'])
-                print(57, registers)
-                if registers:
+                print(57, bits)
+                if bits:
                     try:
-                        ind_value = 1 if (registers[0] != 0 or registers[1] != 0) else 0
+                        ind_value = 1 if (bits[0] != 0 or bits[1] != 0) else 0
                     except:
                         ind_value = 0
                 else:

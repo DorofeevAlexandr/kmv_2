@@ -81,7 +81,7 @@ def read_discrete_inputs_modbus_device(port='/dev/ttyS0', slave_adr=57,
         return
     # print(rr.registers)
     client.close()
-    return rr.registers
+    return rr.bits
 
 def get_indicator_value(registers):
     try:
