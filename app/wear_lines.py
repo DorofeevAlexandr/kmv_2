@@ -40,6 +40,7 @@ def read_serial_port_counters(session, lines_params):
             if line['line_number'] == 57:
                 registers = read_discrete_inputs_modbus_device(port=port,
                                                                slave_adr=line['modbus_adr'])
+                print(57, registers)
                 if registers:
                     try:
                         ind_value = 1 if (registers[0] != 0 or registers[1] != 0) else 0
@@ -47,6 +48,7 @@ def read_serial_port_counters(session, lines_params):
                         ind_value = 0
                 else:
                     ind_value = 0
+                print(57, ind_value)
 
         length = ind_value * line['k'] 
         update_line_in_base(session, line,
