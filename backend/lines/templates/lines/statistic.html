@@ -97,6 +97,18 @@ data : [{% for item in l.made_kabel %} {{item}}, {% endfor %}],
             });
 
             </script>
+                <table style="width: 100%; border: 2; text-align: center; ">
+                    <tr>
+                        {% for item in l.made_kabel %}
+                            <td width="3.2%" > {{item}} </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                         {% for item in times %}
+                            <td> {{item.day}} </td>
+                         {% endfor %}
+                    </tr>
+                </table>
             </td>
 
         </tr> <!--ряд с ячейками тела таблицы-->
