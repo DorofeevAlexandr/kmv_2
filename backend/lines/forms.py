@@ -22,6 +22,14 @@ class ReadAndSaveLinesStatistic(forms.Form):
                           widget=forms.DateInput(format="%Y-%m", attrs={"type": "month"}),
                           input_formats=["%Y-%m"]
                           )
+    show_tables = forms.BooleanField(initial=True,
+                                label="Показать таблицы",
+                                required=False
+                                )
+    show_charts = forms.BooleanField(initial=True,
+                                label="Показать графики",
+                                required=False
+                                )
 
 
 class SelectYearLinesStatistic(forms.Form):
@@ -32,6 +40,14 @@ class SelectYearLinesStatistic(forms.Form):
                           min_value = 2024,
                           step_size = 1,
                           )
+    show_tables = forms.BooleanField(initial=True,
+                                label="Показать таблицы",
+                                required=False
+                                )
+    show_charts = forms.BooleanField(initial=True,
+                                label="Показать графики",
+                                required=False
+                                )
 
 
 class LineParamsKUpdateForm(forms.Form):
