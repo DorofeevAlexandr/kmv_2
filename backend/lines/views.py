@@ -307,7 +307,9 @@ def update_line(request, line_number):
 def connection_with_counters(request):
     lines_connections = []
     time = []
-    lines = get_lines_from_base()
+    lines0 = get_lines_from_base()
+    lines = sorted(lines0, key=lambda d: d['line_number'])
+    # print(*lines)
     if request.method == 'POST':
         form = ReadDataCounters(request.POST, request.FILES)
         if form.is_valid():
@@ -321,7 +323,7 @@ def connection_with_counters(request):
 
     for l in lines:
         try:
-            l['lines_connections'] = lines_connections[l['line_number']]
+            l['lines_connections'] = lines_connections[l['line_number']-1]
         except:
             l['lines_connections'] = []
 
