@@ -60,11 +60,11 @@ def get_counters_conections_from_base(date: dt.date):
     for c in conections:
         minutes = (c.time - time_start).seconds // 60
         conections_in_minute[minutes] = c.connection_counters
-    return  transposition_conections(conections_in_minute)
+    return  visualization_connections(transposition_conections(conections_in_minute))
 
 
 def transposition_conections(conections_in_minute):
-    transp_conections = [[0 for _ in range(1441)] for _ in range(COUNT_LINES)]
+    transp_conections = [[0 for t in range(1441)] for l in range(COUNT_LINES)]
 
     for n_minute in range(1, 1441):
         conection_lines = conections_in_minute[n_minute]
@@ -78,6 +78,28 @@ def transposition_conections(conections_in_minute):
                 transp_conections[n_line][n_minute] = 0
 
     return transp_conections
+
+
+def visualization_connections(transp_conections):
+    vis_conections = [[0 for t in range(1441)] for l in range(COUNT_LINES)]
+    for n_line in range(COUNT_LINES):
+        if transp_conections[n_line][0]:
+            chart_value = 100
+        else:
+            chart_value = 0
+        for n_minute in range(1, 1441):
+            try:
+                if transp_conections[n_line][n_minute]:
+                    chart_value += 25
+                    chart_value = min(100, chart_value)
+                else:
+                    chart_value -= 25
+                    chart_value = max(0, chart_value)
+                vis_conections[n_line][n_minute] = chart_value
+            except:
+                vis_conections[n_line][n_minute] = chart_value
+
+    return vis_conections
 
 
 def get_speed_lines(length_in_minute):
