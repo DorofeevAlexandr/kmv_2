@@ -92,9 +92,13 @@ def statistic(request):
     made_kabel_in_days = []
     times = []
     lines = get_lines_from_base()
+    show_tables = True
+    show_charts = True
     if request.method == 'POST':
         form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
+            show_tables = form.cleaned_data.get('show_tables', None)
+            show_charts = form.cleaned_data.get('show_charts', None)
             calendar_date = form.cleaned_data.get('start_day', None)
             start_date = dt.date(year=calendar_date.year,
                                  month=calendar_date.month,
@@ -112,6 +116,8 @@ def statistic(request):
         'departments': out_department,
         'form': form,
         'times': times,
+        'show_tables': show_tables,
+        'show_charts': show_charts,
     }
     return render(request, 'lines/statistic.html', context=data)
 
@@ -120,9 +126,13 @@ def statistic_ppk(request):
     made_kabel_in_days = []
     times = []
     lines = get_lines_from_base()
+    show_tables = True
+    show_charts = True
     if request.method == 'POST':
         form = ReadAndSaveLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
+            show_tables = form.cleaned_data.get('show_tables', None)
+            show_charts = form.cleaned_data.get('show_charts', None)
             calendar_date = form.cleaned_data.get('start_day', None)
             start_date = dt.date(year=calendar_date.year,
                                  month=calendar_date.month,
@@ -140,6 +150,8 @@ def statistic_ppk(request):
         'departments': out_department,
         'form': form,
         'times': times,
+        'show_tables': show_tables,
+        'show_charts': show_charts,
     }
     return render(request, 'lines/statistic.html', context=data)
 
@@ -149,9 +161,13 @@ def statistics_for_the_year(request):
     times = []
     lines = get_lines_from_base()
     select_year = dt.date.today().year
+    show_tables = True
+    show_charts = True
     if request.method == 'POST':
         form = SelectYearLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
+            show_tables = form.cleaned_data.get('show_tables', None)
+            show_charts = form.cleaned_data.get('show_charts', None)
             select_year = form.cleaned_data.get('select_year', None)
             start_date = dt.date(year=select_year,
                                  month=1,
@@ -177,6 +193,8 @@ def statistics_for_the_year(request):
         'departments': out_department,
         'form': form,
         'times': times,
+        'show_tables': show_tables,
+        'show_charts': show_charts,
     }
     return render(request, 'lines/statistics_for_the_year.html', context=data)
 
@@ -186,9 +204,13 @@ def statistics_for_the_year_ppk(request):
     times = []
     lines = get_lines_from_base()
     select_year = dt.date.today().year
+    show_tables = True
+    show_charts = True
     if request.method == 'POST':
         form = SelectYearLinesStatistic(request.POST, request.FILES)
         if form.is_valid():
+            show_tables = form.cleaned_data.get('show_tables', None)
+            show_charts = form.cleaned_data.get('show_charts', None)
             select_year = form.cleaned_data.get('select_year', None)
             start_date = dt.date(year=select_year,
                                  month=1,
@@ -214,6 +236,8 @@ def statistics_for_the_year_ppk(request):
         'departments': out_department,
         'form': form,
         'times': times,
+        'show_tables': show_tables,
+        'show_charts': show_charts,
     }
     return render(request, 'lines/statistics_for_the_year.html', context=data)
 

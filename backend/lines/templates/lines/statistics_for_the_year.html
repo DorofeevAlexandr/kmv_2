@@ -39,64 +39,67 @@
                 </table>
             </td>
             <td width="90%" >
-                        <!-- bar chart canvas element -->
-            <canvas id="myChart{{l.line_number}}" height="20%"></canvas>
-            <script>
-            var ctx = document.getElementById('myChart{{l.line_number}}');
+            {% if show_charts %}
+                            <!-- bar chart canvas element -->
+                <canvas id="myChart{{l.line_number}}" height="20%"></canvas>
+                <script>
+                var ctx = document.getElementById('myChart{{l.line_number}}');
 
-            var myChart{{l.line_number}} = new Chart(ctx, {
-            type: 'bar',
-            data: {
-labels : [{% for item in times %} "{{item}}", {% endfor %}],
-              datasets: [{
-                label: '{{l.pseudonym}}',
-data : [{% for item in l.made_kabel %} {{item}}, {% endfor %}],
-                borderColor: "rgba(0,160,0,1)",
-                backgroundColor: "rgba(0, 160, 0, 1)",
-                pointRadius: 1,
-                pointHitRadius: 10,
-                stepped: 'middle',
-              }],
-            },
+                var myChart{{l.line_number}} = new Chart(ctx, {
+                type: 'bar',
+                data: {
+    labels : [{% for item in times %} "{{item}}", {% endfor %}],
+                  datasets: [{
+                    label: '{{l.pseudonym}}',
+    data : [{% for item in l.made_kabel %} {{item}}, {% endfor %}],
+                    borderColor: "rgba(0,160,0,1)",
+                    backgroundColor: "rgba(0, 160, 0, 1)",
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    stepped: 'middle',
+                  }],
+                },
 
-            options: {
-                    plugins: {
-                        legend: { display: false,}
-                    },
-                    animation : false,
-                    animation: { duration: 0, },
-                    hover: { animationDuration: 0, },
-                    responsiveAnimationDuration: 0,
-                    elements: { line: {tension: 0, }},
-                    scales: {
-<!--                            xAxes: [{-->
-<!--                                type: "time",-->
-<!--                                time: {-->
-<!--                                    unit: 'hour',-->
-<!--                                    unitStepSize: 1,-->
-<!--                                    round: 'hour',-->
-<!--                                    tooltipFormat: "h:m",-->
-<!--                                    displayFormats: { hour: 'h:m' }-->
-<!--                                }-->
-<!--                            }],-->
-                            x: {
-                                ticks: {
-                                    font: {size: 10},
-                                    maxRotation: 0,
-                                    minRotation: 0,
-                                }
-                            },
-                            y: {
-                                ticks: {
-                                    font: {size: 10},
+                options: {
+                        plugins: {
+                            legend: { display: false,}
+                        },
+                        animation : false,
+                        animation: { duration: 0, },
+                        hover: { animationDuration: 0, },
+                        responsiveAnimationDuration: 0,
+                        elements: { line: {tension: 0, }},
+                        scales: {
+    <!--                            xAxes: [{-->
+    <!--                                type: "time",-->
+    <!--                                time: {-->
+    <!--                                    unit: 'hour',-->
+    <!--                                    unitStepSize: 1,-->
+    <!--                                    round: 'hour',-->
+    <!--                                    tooltipFormat: "h:m",-->
+    <!--                                    displayFormats: { hour: 'h:m' }-->
+    <!--                                }-->
+    <!--                            }],-->
+                                x: {
+                                    ticks: {
+                                        font: {size: 10},
+                                        maxRotation: 0,
+                                        minRotation: 0,
+                                    }
+                                },
+                                y: {
+                                    ticks: {
+                                        font: {size: 10},
+                                    },
                                 },
                             },
-                        },
-            }
+                }
 
-            });
+                });
 
-            </script>
+                </script>
+            {% endif %}
+            {% if show_tables %}
                 <table style="width: 100%; border-collapse: collapse; border: 1px solid #333; text-align: center; ">
                     <tr>
                         {% for item in l.made_kabel %}
@@ -109,6 +112,7 @@ data : [{% for item in l.made_kabel %} {{item}}, {% endfor %}],
                          {% endfor %}
                     </tr>
                 </table>
+            {% endif %}
             </td>
 
         </tr> <!--ряд с ячейками тела таблицы-->
