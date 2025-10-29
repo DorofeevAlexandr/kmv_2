@@ -21,9 +21,9 @@
                 <td>{{l.modbus_adr}}</td>
                 <td> <a href="{{ l.line_url }}"> {{l.pseudonym}} </a> </td>
                 <td>{{l.indicator_value}}</td>
-                <td>{{l.length}}</td>
+                <td>{{l.length|floatformat:2}}</td>
                 <td>{{l.k}}</td>
-                <td>{{l.speed_line}}</td>
+                <td>{{l.speed_line|floatformat:2}}</td>
             </tr>
         {% endfor %}
     </table>
