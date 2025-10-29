@@ -5,9 +5,9 @@ from django.urls import reverse
 
 class Counters(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
-    time = models.DateTimeField()
-    lengths = models.TextField(blank=True, null=True)  # This field type is a guess.
-    connection_counters = models.TextField(blank=True, null=True)  # This field type is a guess.
+    time = models.DateTimeField(verbose_name='Время')
+    lengths = models.TextField(verbose_name='Значения длины, м', blank=True, null=True)  # This field type is a guess.
+    connection_counters = models.TextField(verbose_name='Наличие связи', blank=True, null=True)  # This field type is a guess.
 
     class Meta:
         managed = False
@@ -21,8 +21,8 @@ class Counters(models.Model):
 
 class LinesStatistics(models.Model):
     # id = models.IntegerField(primary_key=True, editable=False)
-    date = models.DateTimeField()
-    made_kabel = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(verbose_name='Дата' )
+    made_kabel = models.TextField(verbose_name='Произведено кабеля, км', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -36,18 +36,18 @@ class LinesStatistics(models.Model):
 
 class Lines(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
-    line_number = models.IntegerField(unique=True)
-    name = models.CharField(unique=True, max_length=1)
-    pseudonym = models.CharField(unique=True, max_length=1)
-    port = models.CharField(max_length=1)
-    modbus_adr = models.IntegerField()
-    department = models.IntegerField()
-    number_of_display = models.IntegerField()
-    cable_number = models.IntegerField()
-    cable_connection_number = models.IntegerField()
-    k = models.FloatField()
-    created_dt = models.DateTimeField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    line_number = models.IntegerField(verbose_name='№ линии', unique=True)
+    name = models.CharField(verbose_name='Имя линии', unique=True, max_length=1)
+    pseudonym = models.CharField(verbose_name='Отображаемое имя линии', unique=True, max_length=1)
+    port = models.CharField(verbose_name='Порт', max_length=1)
+    modbus_adr = models.IntegerField(verbose_name='Modbus адрес', )
+    department = models.IntegerField(verbose_name='№ цеха', )
+    number_of_display = models.IntegerField(verbose_name='Порядок отображения', )
+    cable_number = models.IntegerField(verbose_name='№ кабеля', )
+    cable_connection_number = models.IntegerField(verbose_name='№ подключения в кабеле', )
+    k = models.FloatField(verbose_name='Коэффициент', )
+    created_dt = models.DateTimeField(verbose_name='Дата создания', blank=True, null=True)
+    description = models.TextField(verbose_name='Описание', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -64,12 +64,12 @@ class Lines(models.Model):
 
 class LinesCurrentParams(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
-    line_number = models.IntegerField(blank=True, null=True, unique=True)
-    connection_counter = models.BooleanField(blank=True, null=True)
-    indicator_value = models.IntegerField(blank=True, null=True)
-    length = models.FloatField(blank=True, null=True)
-    speed_line = models.FloatField(blank=True, null=True)
-    updated_dt = models.DateTimeField(blank=True, null=True)
+    line_number = models.IntegerField(verbose_name='№ линии', blank=True, null=True, unique=True)
+    connection_counter = models.BooleanField(verbose_name='Наличие связи', blank=True, null=True)
+    indicator_value = models.IntegerField(verbose_name='Значение индикатора', blank=True, null=True)
+    length = models.FloatField(verbose_name='Метраж, м', blank=True, null=True)
+    speed_line = models.FloatField(verbose_name='Скорость линии, м/мин', blank=True, null=True)
+    updated_dt = models.DateTimeField(verbose_name='Время обновления', blank=True, null=True)
 
     class Meta:
         managed = False
