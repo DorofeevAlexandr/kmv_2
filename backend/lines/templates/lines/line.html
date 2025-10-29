@@ -21,7 +21,12 @@
                 <th>{{ line.line_number }}</th>
                 <td>{{ line.modbus_adr }}</td>
                 <td>{{ line.pseudonym }}</td>
-                <td>{{line_current_params.indicator_value }}</td>
+                {% if not line_current_params.connection_counter %}
+                    <td BGCOLOR="red">
+                {% else %}
+                    <td>
+                {%endif%}
+                    {{line_current_params.indicator_value}}</td>
                 <td>{{ form.k }} | <button type="submit">Обновить</button>  </td>
                 <td>{{ line_current_params.length|floatformat:2 }}</td>
                 <td>{{ line_current_params.speed_line|floatformat:2 }}</td>

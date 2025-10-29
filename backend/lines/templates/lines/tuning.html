@@ -20,7 +20,12 @@
                 <th>{{l.line_number}}</th>
                 <td>{{l.modbus_adr}}</td>
                 <td> <a href="{{ l.line_url }}"> {{l.pseudonym}} </a> </td>
-                <td>{{l.indicator_value}}</td>
+                {% if not l.connection_counter %}
+                    <td BGCOLOR="red">
+                {% else %}
+                    <td>
+                {%endif%}
+                    {{l.indicator_value}}</td>
                 <td>{{l.length|floatformat:2}}</td>
                 <td>{{l.k}}</td>
                 <td>{{l.speed_line|floatformat:2}}</td>
