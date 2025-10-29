@@ -1,6 +1,11 @@
 from django.contrib import admin
 from .models import Counters, Lines, LinesCurrentParams
 
+
+admin.site.site_header = "Панель администрирования"
+admin.site.index_title = "Контроль машинного времени"
+
+
 @admin.register(Counters)
 class CountersAdmin(admin.ModelAdmin):
     # Отображение полей в списке
