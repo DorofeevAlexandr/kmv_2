@@ -41,7 +41,7 @@ class Lines(models.Model):
     pseudonym = models.CharField(verbose_name='Отображаемое имя линии', unique=True, max_length=1)
     port = models.CharField(verbose_name='Порт', max_length=1)
     modbus_adr = models.IntegerField(verbose_name='Modbus адрес', )
-    department = models.IntegerField(verbose_name='№ цеха', )
+    department = models.CharField(verbose_name='№ цеха', max_length=10)
     number_of_display = models.IntegerField(verbose_name='Порядок отображения', )
     cable_number = models.IntegerField(verbose_name='№ кабеля', )
     cable_connection_number = models.IntegerField(verbose_name='№ подключения в кабеле', )
