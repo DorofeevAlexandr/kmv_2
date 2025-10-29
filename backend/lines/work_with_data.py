@@ -1,4 +1,7 @@
 import datetime as dt
+from dotenv import load_dotenv
+import os
+
 from django.shortcuts import get_object_or_404
 from calendar import month, Month
 from os import times
@@ -8,6 +11,9 @@ from .models import Counters, Lines, LinesStatistics
 
 
 COUNT_LINES = 70
+
+
+load_dotenv()
 
 
 def get_lines_from_base():
@@ -299,7 +305,7 @@ def change_line_stat_rollers_57(lines_statistic: list, n: int):
     lines_statistic[n - 1]['made_kabel_2'] = ''
 
 
-def change_lines_statistic(lines_statistic:list):
+def change_title_lines_statistic(lines_statistic:list):
     change_line_stat_twists_in_minute(lines_statistic, 6)
     change_line_stat_twists_in_minute(lines_statistic, 7)
 
@@ -362,7 +368,10 @@ def get_data_in_select_date(select_date: dt.datetime):
     # print(speed_lines)
 
     lines_statistic = get_lines_statistic(speed_lines)
-    change_lines_statistic(lines_statistic)
+
+    if os.environ.get('PLACE', 'CVT') == 'CVT':
+        change_title_lines_statistic(lines_statistic)
+
     smale_speed_lines = get_smale_speed_lines(speed_lines)
     change_speed_lines(smale_speed_lines)
     time = [dt.time(hour=(((n * 5) // 60) + 8) % 24, minute=((n * 5) % 60)) for n, speed in
