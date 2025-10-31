@@ -175,8 +175,48 @@ def antialiasing_speed_value_5_minute(speed_lines: list):
             speed3 = speed4
 
 
+def antialiasing_speed_value_10_minute(speed_lines: list):
+    for num_lines in range(len(speed_lines)):
+        speed0 = speed_lines[num_lines][0]
+        speed1 = speed_lines[num_lines][1]
+        speed2 = speed_lines[num_lines][2]
+        speed3 = speed_lines[num_lines][3]
+        speed4 = speed_lines[num_lines][4]
+        speed5 = speed_lines[num_lines][5]
+        speed6 = speed_lines[num_lines][6]
+        speed7 = speed_lines[num_lines][7]
+        speed8 = speed_lines[num_lines][8]
+        speed9 = speed_lines[num_lines][9]
+
+        average_speed = (speed0 + speed1 + speed2 + speed3 + speed4 +
+                         speed5 + speed6 + speed7 + speed8 + speed9) / 10
+        speed_lines[num_lines][0] = average_speed
+        speed_lines[num_lines][1] = average_speed
+        speed_lines[num_lines][2] = average_speed
+        speed_lines[num_lines][3] = average_speed
+        speed_lines[num_lines][4] = average_speed
+        speed_lines[num_lines][5] = average_speed
+        speed_lines[num_lines][6] = average_speed
+        speed_lines[num_lines][7] = average_speed
+        speed_lines[num_lines][8] = average_speed
+        for minute in range(len(speed_lines[num_lines])):
+            speed9 = speed_lines[num_lines][minute]
+            average_speed = (speed0 + speed1 + speed2 + speed3 + speed4 +
+                             speed5 + speed6 + speed7 + speed8 + speed9) / 10
+            speed_lines[num_lines][minute] = average_speed
+            speed0 = speed1
+            speed1 = speed2
+            speed2 = speed3
+            speed3 = speed4
+            speed4 = speed5
+            speed5 = speed6
+            speed6 = speed7
+            speed7 = speed8
+            speed8 = speed9
+
+
 def antialiasing_speed_value(speed_lines: list):
-    antialiasing_speed_value_5_minute(speed_lines)
+    antialiasing_speed_value_10_minute(speed_lines)
 
 
 def get_str_time(minutes: int):
