@@ -108,26 +108,49 @@ def visualization_connections(transp_conections):
     return vis_conections
 
 
-def get_speed_lines(length_in_minute):
-    speed_lines = [[0 for _ in range(1441)] for _ in range(COUNT_LINES)]
+def clear_zero_values(l_values: list):
+    last_value = l_values[0]
+    for n in range(len(l_values)):
+        cur_value = l_values[n]
+        if cur_value == 0:
+            l_values[n] = last_value
+        else:
+            last_value = cur_value
 
-    for n_minute in range(1, 1441):
-        length_lines = length_in_minute[n_minute]
-        for n_line, length in enumerate(length_lines):
+
+def get_transposition_length_in_minute(length_in_minute):
+    lengths_lines = [[0 for _ in range(1441)] for _ in range(COUNT_LINES)]
+    # Транспонирование матрицы с даными
+    for n_minute in range(0, 1441):
+        for n_line in range(len(length_in_minute[n_minute])):
             try:
-                speed = (length_in_minute[n_minute][n_line] -
-                        length_in_minute[n_minute - 1][n_line]) / 1000
+                lengths_lines[n_line][n_minute] = length_in_minute[n_minute][n_line]
+            except:
+                lengths_lines[n_line][n_minute] = 0
+    return lengths_lines
+
+
+def get_speed_lines(length_in_minute):
+
+    lengths_lines = get_transposition_length_in_minute(length_in_minute)
+
+    for n_line in range(len(lengths_lines)):
+        clear_zero_values(lengths_lines[n_line])
+
+    speed_lines = [[0 for _ in range(1441)] for _ in range(COUNT_LINES)]
+    for n_line in range(len(lengths_lines)):
+        for n_minute in range(1, 1441):
+            try:
+                speed = (lengths_lines[n_line][n_minute] -
+                        lengths_lines[n_line][n_minute - 1]) / 1000
                 if speed > 10000 or speed < 0:
                     speed_lines[n_line][n_minute] = 0
                 else:
                     speed_lines[n_line][n_minute] = speed
             except:
                 speed_lines[n_line][n_minute] = 0
-
-    # for line in speed_lines:
-    #     print('--------------------')
-    #     print(line)
     return speed_lines
+
 
 def num_smena(minute):
     hour = minute // 60
