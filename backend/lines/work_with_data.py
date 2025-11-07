@@ -460,7 +460,7 @@ def get_data_in_select_date(select_date: dt.datetime):
 
     if os.environ.get('PLACE', 'CVT') == 'CVT':
         change_title_lines_statistic(lines_statistic)
-    step = 1
+    step = 3
     smale_speed_lines = get_smale_speed_lines(speed_lines, step)
     change_speed_lines(smale_speed_lines)
     time = [dt.time(hour=(((n * step) // 60) + 8) % 24, minute=((n * step) % 60)) for n, speed in
