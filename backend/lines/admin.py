@@ -14,6 +14,7 @@ class CountersAdmin(admin.ModelAdmin):
     list_filter = ('time',)
     # Поиск по полям
     search_fields = ('time',)
+    date_hierarchy = 'time'
 
 
 @admin.register(LinesStatistics)
@@ -24,6 +25,7 @@ class LinesStatisticsAdmin(admin.ModelAdmin):
     list_filter = ('date',)
     # Поиск по полям
     search_fields = ('date',)
+    date_hierarchy = 'date'
 
 
 @admin.register(Lines)
@@ -45,6 +47,6 @@ class LinesCurrentParamsAdmin(admin.ModelAdmin):
     # Отображение полей в списке
     list_display = ('line_number', 'connection_counter', 'indicator_value', 'length', 'speed_line', 'updated_dt', )
     # Фильтрация в списке
-    list_filter = ('line_number',)
+    # list_filter = ('line_number',)
     # Поиск по полям
     search_fields = ('line_number',)
