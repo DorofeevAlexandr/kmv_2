@@ -257,6 +257,7 @@ def get_lines_params_from_base():
                             'number_of_display': line.number_of_display,
                             'k': line.k,
                             'indicator_value': line_current_params.indicator_value,
+                            'connection_counter': line_current_params.connection_counter,
                             'length': line_current_params.length,
                             'speed_line': line_current_params.speed_line,
                             'line_url': line.get_absolute_url(),
