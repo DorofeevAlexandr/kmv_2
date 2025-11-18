@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import time
 
-import control_plc
+import add_threads
 
 from wear_lines import (read_lines_params_in_base, read_plc_counters, read_serial_port_counters)
 
@@ -29,7 +29,7 @@ def postgres_engine():
 def read_counters_save_current_params(p_engine):
     with Session(autoflush=False, bind=p_engine) as db:
 
-        registers = control_plc.get_registers()
+        registers = add_threads.get_registers()
         lines_params = read_lines_params_in_base(session=db)
         # print(lines_params)
         read_plc_counters(db, lines_params, registers)
