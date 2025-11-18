@@ -6,10 +6,8 @@ from sqlalchemy.orm import Session
 import time
 
 import control_plc
-from save_csv_file import append_in_csv
-from wear_lines import (read_lines_params_in_base, read_plc_counters, read_serial_port_counters,
-                        read_current_lengths_in_base, read_current_connections_in_base, read_lines_name,
-                        add_in_base_counters)
+
+from wear_lines import (read_lines_params_in_base, read_plc_counters, read_serial_port_counters)
 
 
 def postgres_engine():
@@ -41,21 +39,7 @@ def read_counters_save_current_params(p_engine):
         except Exception as e:
             print('error', e)
 
-def read_current_params_save_in_base(p_engine):
-    with Session(autoflush=False, bind=p_engine) as db:
-        current_lengths = read_current_lengths_in_base(db)
-        # print(current_lengths)
-        current_connections = read_current_connections_in_base(db)
-        # print(current_connections)
-        lines_name = read_lines_name(db)
-        # print(lines_name)
 
-        append_in_csv(lines_name=lines_name, current_lengths=current_lengths)
-        add_in_base_counters(db, current_lengths=current_lengths, current_connections=current_connections)
-        try:
-            pass
-        except Exception as e:
-            print('error', e)
 
 if __name__ == '__main__':
     engine = postgres_engine()
@@ -63,12 +47,6 @@ if __name__ == '__main__':
     dt_last_save_lengths = dt.datetime.now()
     while True:
         time.sleep(1)
-
-        if ((0 < dt.datetime.now().second < 30 ) and
-                (dt.datetime.now() - dt_last_save_lengths > dt.timedelta(seconds=30))):
-            dt_last_save_lengths = dt.datetime.now()
-            # print('dt_last_save_lengths', dt_last_save_lengths)
-            read_current_params_save_in_base(p_engine=engine)
 
         if dt.datetime.now() - dt_last_save_current_params >= dt.timedelta(seconds=30):
             read_counters_save_current_params(p_engine=engine)
