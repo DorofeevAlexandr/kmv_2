@@ -127,12 +127,12 @@ def read_current_params_save_in_base_thread():
             read_current_params_save_in_base(p_engine=engine)
 
 # start polling thread
-tp = Thread(target=polling_thread)
+# tp = Thread(target=polling_thread)
 read_save_in_base_thread = Thread(target=read_current_params_save_in_base_thread)
 # set daemon: polling thread will exit if main thread exit
-tp.daemon = True
+# tp.daemon = True
 read_save_in_base_thread.daemon = True
-tp.start()
+# tp.start()
 read_save_in_base_thread.start()
 
 

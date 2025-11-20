@@ -29,10 +29,10 @@ def postgres_engine():
 def read_counters_save_current_params(p_engine):
     with Session(autoflush=False, bind=p_engine) as db:
 
-        registers = add_threads.get_registers()
+        # registers = add_threads.get_registers()
         lines_params = read_lines_params_in_base(session=db)
         # print(lines_params)
-        read_plc_counters(db, lines_params, registers)
+        # read_plc_counters(db, lines_params, registers)
         read_serial_port_counters(db, lines_params)
         try:
             pass
