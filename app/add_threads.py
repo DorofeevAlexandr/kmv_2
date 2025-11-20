@@ -121,7 +121,7 @@ def read_current_params_save_in_base_thread():
 
         if ((0 <= dt.datetime.now().second < 30 ) and
                 (dt.datetime.now() - dt_last_save_lengths > dt.timedelta(seconds=30))):
-            print(dt_last_save_lengths)
+            # print(dt_last_save_lengths)
             dt_last_save_lengths = dt.datetime.now()
             # print('dt_last_save_lengths', dt_last_save_lengths)
             read_current_params_save_in_base(p_engine=engine)
