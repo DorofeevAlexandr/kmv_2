@@ -14,11 +14,4 @@
 
 Advanced -> IT8784 Super IO Configuration -> Restore on AC Power Loss := Power On
 
- 
-Для установкми Watchdog таймера нужно изменить следующие параметры:
-
-Advanced -> IT8784 Super IO Configuration -> Watchdog Controller := Minute mode
-
-...->Watchdog timer value input := 255
-
 ----------------------------------------------
