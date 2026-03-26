@@ -19,6 +19,26 @@ def get_speed(dt_old, length, old_length):
         return 60.0 * (length - old_length) / seconds
 
 
+def ind_value_vapour_generator(bits):
+    if bits:
+        try:
+            if bits[0] == 1 and bits[1] == 0:
+                ind_value = 1
+            elif bits[0] == 0 and bits[1] == 1:
+                ind_value = 2
+            elif bits[0] == 1 and bits[1] == 1:
+                ind_value = 3
+            else:
+                ind_value = 0
+        except:
+            ind_value = 0
+    else:
+        ind_value = 0
+    print('80 - 81', bits)
+    print('80 - 81', ind_value)
+    return ind_value
+
+
 def read_serial_port_counters(session, lines_params):
     for line in lines_params:
         if line['port'] == 'ttyS0':
@@ -49,6 +69,14 @@ def read_serial_port_counters(session, lines_params):
                 else:
                     ind_value = 0
                 # print(57, ind_value)
+
+            # Исключение для парогенераторов
+            if line['line_number'] == 80 or line['line_number'] == 81:
+                bits = read_discrete_inputs_modbus_device(port=port,
+                                                          slave_adr=line['modbus_adr'])
+                ind_value = ind_value_vapour_generator(bits)
+
+
 
         length = ind_value * line['k'] 
         update_line_in_base(session, line,
@@ -138,6 +166,13 @@ def update_line_in_base(session, line_params, ind_value=0, conected=False, lengt
             length = current_params['length'] + length
         else:
             length = 0
+
+        # # Исключение для парогенераторов
+        if (line_number == 80 or line_number==81) and ind_value != 0:
+            if current_params and (current_params['length'] is not None):
+                length = current_params['length'] + length
+            else:
+                length = 0
 
     line = session.query(LinesCurrentParams).filter(LinesCurrentParams.line_number==line_number).first()
     if line:
