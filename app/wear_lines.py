@@ -24,7 +24,7 @@ def ind_value_vapour_generator(bits):
         try:
             ind_value = 100 if bits[0] != 0 else 0
             if bits[1] != 0:
-                ind_value += 1
+                ind_value += 10
         except:
             ind_value = 0
     else:
