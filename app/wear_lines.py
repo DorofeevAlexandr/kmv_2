@@ -160,12 +160,12 @@ def update_line_in_base(session, line_params, ind_value=0, conected=False, lengt
         else:
             length = 0
 
-        # # Исключение для парогенераторов
-        if (line_number == 75 or line_number==76) and ind_value != 0:
-            if current_params and (current_params['length'] is not None):
-                length = current_params['length'] + length
-            else:
-                length = 0
+    # # Исключение для парогенераторов
+    if (line_number == 75 or line_number==76) and ind_value != 0:
+        if current_params and (current_params['length'] is not None):
+            length = current_params['length'] + length
+        else:
+            length = 0
 
     line = session.query(LinesCurrentParams).filter(LinesCurrentParams.line_number==line_number).first()
     if line:
