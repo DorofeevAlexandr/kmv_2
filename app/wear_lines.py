@@ -29,8 +29,6 @@ def ind_value_vapour_generator(bits):
             ind_value = 0
     else:
         ind_value = 0
-    print('75 - 76', bits)
-    print('75 - 76', ind_value)
     return ind_value
 
 
