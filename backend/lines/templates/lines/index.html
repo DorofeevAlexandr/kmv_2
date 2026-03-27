@@ -58,7 +58,17 @@ data : [{% for item in l.speed %} {{item}}, {% endfor %}],
                 pointRadius: 1,
                 pointHitRadius: 10,
 <!--                stepped: 'middle',-->
-              }],
+                }
+            {% if l.line_number == 75 or  l.line_number == 76 %}
+                ,{
+                data : [{% for item in l.speed %} ({{item}} * 100 + 1) % 100, {% endfor %}],
+                borderColor: "rgba(160,0,0,1)",
+                pointRadius: 1,
+                pointHitRadius: 10,
+                }
+            {% endif %}
+
+              ],
             },
 
             options: {
