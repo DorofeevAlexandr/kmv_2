@@ -61,7 +61,7 @@ data : [{% for item in l.speed %} {{item}}, {% endfor %}],
                 }
             {% if l.line_number == 75 or  l.line_number == 76 %}
                 ,{
-                data : [{% for item in l.speed %} ({{item}} * 100 + 1) % 100, {% endfor %}],
+                data : [{% for item in l.speed %} (({{item}} * 100) % 100) * 100, {% endfor %}],
                 borderColor: "rgba(160,0,0,1)",
                 pointRadius: 1,
                 pointHitRadius: 10,
