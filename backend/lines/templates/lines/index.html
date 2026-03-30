@@ -66,6 +66,12 @@ data : [{% for item in l.speed %}  {{item}} - ({{item}} % 100), {% endfor %}],
                 pointRadius: 1,
                 pointHitRadius: 10,
                 }
+                ,{
+data : [{% for item in l.speed %}  {{item}}, {% endfor %}],
+                borderColor: "rgba(0,0,160,1)",
+                pointRadius: 1,
+                pointHitRadius: 10,
+                }
             {% else %}
 data : [{% for item in l.speed %} {{item}}, {% endfor %}],
                 borderColor: "rgba(0,160,0,1)",
