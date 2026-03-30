@@ -204,7 +204,7 @@ def antialiasing_speed_value_10_minute(speed_lines: list, non_antialiasing_lines
             for minute in range(len(speed_lines[num_lines])):
                 speed = speed_lines[num_lines][minute]
                 speed = max(speed, 0)
-                speed = min(speed, 110000)
+                speed = min(speed, 110)
                 speed_lines[num_lines][minute] = speed
             continue
         speed0 = speed_lines[num_lines][0]
