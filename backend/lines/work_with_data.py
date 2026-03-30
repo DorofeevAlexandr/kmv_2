@@ -198,8 +198,10 @@ def antialiasing_speed_value_5_minute(speed_lines: list):
             speed3 = speed4
 
 
-def antialiasing_speed_value_10_minute(speed_lines: list):
+def antialiasing_speed_value_10_minute(speed_lines: list, non_antialiasing_lines: list):
     for num_lines in range(len(speed_lines)):
+        if num_lines in non_antialiasing_lines:
+            continue
         speed0 = speed_lines[num_lines][0]
         speed1 = speed_lines[num_lines][1]
         speed2 = speed_lines[num_lines][2]
@@ -239,7 +241,10 @@ def antialiasing_speed_value_10_minute(speed_lines: list):
 
 
 def antialiasing_speed_value(speed_lines: list):
-    antialiasing_speed_value_10_minute(speed_lines)
+    non_antialiasing_lines = []
+    if os.environ.get('PLACE', 'CVT') == 'CVT':
+        non_antialiasing_lines = [57, 75, 76]
+    antialiasing_speed_value_10_minute(speed_lines, non_antialiasing_lines)
 
 
 def get_str_time(minutes: int):
