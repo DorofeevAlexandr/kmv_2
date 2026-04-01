@@ -421,6 +421,8 @@ def change_title_lines_statistic(lines_statistic:list):
     change_line_stat_twists_in_minute(lines_statistic, 50)
 
     change_line_stat_rollers_57(lines_statistic, 57)
+    change_line_stat_rollers_57(lines_statistic, 75)
+    change_line_stat_rollers_57(lines_statistic, 76)
 
 
 def change_speed_lines_metr_in_second(speed_lines:list, num_lines: int):
