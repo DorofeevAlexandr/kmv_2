@@ -388,7 +388,7 @@ def change_line_stat_metr_in_second(lines_statistic: list, n: int):
     lines_statistic[n - 1]['average_speed_2'] = f"{(float(lines_statistic[n - 1]['average_speed_2']) / 60.0):5.1f}"
 
 
-def change_line_stat_rollers_57(lines_statistic: list, n: int):
+def change_line_stat_clear_data(lines_statistic: list, n: int):
     lines_statistic[n - 1]['label_max_value'] = ' '
     lines_statistic[n - 1]['label_average_speed'] = ' '
     lines_statistic[n - 1]['label_made_kabel'] = ' '
@@ -420,9 +420,9 @@ def change_title_lines_statistic(lines_statistic:list):
 
     change_line_stat_twists_in_minute(lines_statistic, 50)
 
-    change_line_stat_rollers_57(lines_statistic, 57)
-    change_line_stat_rollers_57(lines_statistic, 75)
-    change_line_stat_rollers_57(lines_statistic, 76)
+    change_line_stat_clear_data(lines_statistic, 57)
+    change_line_stat_clear_data(lines_statistic, 75)
+    change_line_stat_clear_data(lines_statistic, 76)
 
 
 def change_speed_lines_metr_in_second(speed_lines:list, num_lines: int):
