@@ -248,7 +248,7 @@ def antialiasing_speed_value_10_minute(speed_lines: list, non_antialiasing_lines
 def antialiasing_speed_value(speed_lines: list):
     non_antialiasing_lines = []
     if os.environ.get('PLACE', 'CVT') == 'CVT':
-        non_antialiasing_lines = [57, 75, 76]
+        non_antialiasing_lines = [57 - 1, 75 - 1 , 76 - 1]
     antialiasing_speed_value_10_minute(speed_lines, non_antialiasing_lines)
 
 
