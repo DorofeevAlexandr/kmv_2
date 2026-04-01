@@ -15,6 +15,8 @@ COUNT_LINES = 80
 
 load_dotenv()
 
+VAPOR_GENERATOR_LINES = [75, 76] if os.environ.get('PLACE', 'CVT') == 'CVT' else []
+
 
 def get_lines_from_base():
     out_lines = []
@@ -478,6 +480,19 @@ def get_data_in_select_date(select_date: dt.datetime):
     return time, smale_speed_lines, lines_statistic
 
 
+def decode_vapor_generator_trend(speed_lines, line_number):
+    values = []
+    for speed in speed_lines[line_number - 1]:
+        sp = int(speed)
+        # print(line_number, speed, sp)
+        heating = 25 if sp == 10 or sp == 110 else 0
+        temperature = 100 if sp == 100 or sp == 110 else 0
+        values.append({'heating' : heating,
+                       'temperature' : temperature,
+                       'sp' : sp})
+    return values
+
+
 def get_sorted_departments_data(departments, lines_statistic, smale_speed_lines):
     out_department = []
     for department in departments:
@@ -485,7 +500,12 @@ def get_sorted_departments_data(departments, lines_statistic, smale_speed_lines)
         for line in department:
             n = line['line_number']
             if lines_statistic and smale_speed_lines:
-                speed = [int(sp) for sp in  smale_speed_lines[n - 1]]
+                if n in VAPOR_GENERATOR_LINES:
+                    # print(n)
+                    speed = decode_vapor_generator_trend(speed_lines=smale_speed_lines,
+                                                         line_number=n)
+                else:
+                    speed = [int(sp) for sp in  smale_speed_lines[n - 1]]
                 out_lines.append({**line,
                                   'statistic': lines_statistic[n - 1],
                                   'speed': speed} )
