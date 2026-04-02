@@ -496,27 +496,27 @@ def get_data_in_select_date(select_date: dt.datetime):
     return time, smale_speed_lines, lines_statistic
 
 
+def fill_zero_spaces_by_key(speed_lines, key):
+    prev_value = 0
+    zero_counter = 0
+    for values in speed_lines:
+        value = values[key]
+        if value == 0:
+            zero_counter += 1
+            if zero_counter <= 1:
+                values[key] = prev_value
+        else:
+            zero_counter = 0
+            prev_value = value
+
+
 def decode_vapor_generator_trend(speed_lines, line_number):
     values = []
-    heating_pred = 0
-    temperature_pred = 0
     for speed in speed_lines[line_number - 1]:
         sp = int(speed)
         # print(line_number, speed, sp)
         heating = 25 if sp == 10 or sp == 110 else 0
         temperature = 100 if sp == 100 or sp == 110 else 0
-        if (heating == 0) and (heating_pred != 0):
-            heating = heating_pred
-            heating_pred = 0
-        else:
-            heating_pred = heating
-
-        if (temperature == 0) and (temperature_pred != 0):
-            temperature = temperature_pred
-            temperature_pred = 0
-        else:
-            temperature_pred = temperature
-
         values.append({'heating' : heating,
                        'temperature' : temperature,
                        'sp' : sp})
@@ -534,6 +534,10 @@ def get_sorted_departments_data(departments, lines_statistic, smale_speed_lines)
                     # print(n)
                     speed = decode_vapor_generator_trend(speed_lines=smale_speed_lines,
                                                          line_number=n)
+                    fill_zero_spaces_by_key(speed,
+                                     key='heating' )
+                    fill_zero_spaces_by_key(speed,
+                                     key='temperature')
                 else:
                     speed = [int(sp) for sp in  smale_speed_lines[n - 1]]
                 out_lines.append({**line,
