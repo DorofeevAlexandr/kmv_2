@@ -247,12 +247,26 @@ def antialiasing_speed_value_10_minute(speed_lines: list, non_antialiasing_lines
             speed8 = speed9
 
 
+def fill_zero_spaces(speed_lines, line_number):
+    prev_value = 0
+    zero_counter = 0
+    for minute, value in enumerate(speed_lines[line_number]):
+        if value == 0:
+            zero_counter += 1
+            if zero_counter <=5:
+                speed_lines[line_number][minute] = prev_value
+        else:
+            zero_counter = 0
+            prev_value = value
+
+
 def antialiasing_speed_value(speed_lines: list):
     non_antialiasing_lines = []
     if os.environ.get('PLACE', 'CVT') == 'CVT':
         non_antialiasing_lines = [57 - 1, 75 - 1 , 76 - 1]
     antialiasing_speed_value_10_minute(speed_lines, non_antialiasing_lines)
-
+    for line_index in non_antialiasing_lines:
+        fill_zero_spaces(speed_lines, line_index)
 
 def get_str_time(minutes: int):
     hour = minutes // 60
