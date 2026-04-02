@@ -22,7 +22,7 @@ def get_speed(dt_old, length, old_length):
 def ind_value_vapour_generator(bits):
     if bits:
         try:
-            ind_value = 10 if bits[0] != 0 else 0
+            ind_value = 10 if bits[0] != 0 else 1
             if bits[1] != 0:
                 ind_value += 100
         except:
