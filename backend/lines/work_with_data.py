@@ -248,7 +248,7 @@ def fill_zero_spaces(speed_lines, line_number):
     for minute, value in enumerate(speed_lines[line_number]):
         if value == 0:
             zero_counter += 1
-            if zero_counter <=5:
+            if zero_counter <=7:
                 speed_lines[line_number][minute] = prev_value
         else:
             zero_counter = 0
@@ -498,7 +498,7 @@ def fill_zero_spaces_by_key(speed_lines, key):
         value = values[key]
         if value == 0:
             zero_counter += 1
-            if zero_counter <= 1:
+            if zero_counter <= 2:
                 values[key] = prev_value
         else:
             zero_counter = 0
