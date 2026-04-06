@@ -511,7 +511,7 @@ def decode_vapor_generator_trend(speed_lines, line_number):
         sp = int(speed)
         # print(line_number, speed, sp)
         heating = 25 if sp == 10 or sp == 110 else 0
-        temperature = 100 if sp == 100 or sp == 110 else 0
+        temperature = 100 if sp == 100 or sp == 110 or sp == 101 else 0
         values.append({'heating' : heating,
                        'temperature' : temperature,
                        'sp' : sp})
