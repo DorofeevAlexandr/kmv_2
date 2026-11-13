@@ -56,7 +56,7 @@
 labels : [{% for item in times %} "{{item}}", {% endfor %}],
               datasets: [{
                 label: '{{l.pseudonym}}',
-{% if l.line_number == 75 or  l.line_number == 76 %}
+{% if l.line_number == 75 or  l.line_number == 76  or  l.line_number == 81  or  l.line_number == 82 %}
 data : [{% for item in l.speed %} {{item.heating}}, {% endfor %}],
                 borderColor: "rgba(0,160,0,1)",
                 pointRadius: 1,

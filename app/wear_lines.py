@@ -64,7 +64,7 @@ def read_serial_port_counters(session, lines_params):
                 # print(57, ind_value)
 
             # Исключение для парогенераторов
-            if line['line_number'] == 75 or line['line_number'] == 76:
+            if line['line_number'] == 75 or line['line_number'] == 76 or line['line_number'] == 81 or line['line_number'] == 82:
                 bits = read_discrete_inputs_modbus_device(port=port,
                                                           slave_adr=line['modbus_adr'])
                 ind_value = ind_value_vapour_generator(bits)
@@ -161,7 +161,7 @@ def update_line_in_base(session, line_params, ind_value=0, conected=False, lengt
             length = 0
 
     # # Исключение для парогенераторов
-    if (line_number == 75 or line_number==76) and ind_value != 0:
+    if (line_number == 75 or line_number==76 or line_number==81 or line_number==82) and ind_value != 0:
         if current_params and (current_params['length'] is not None):
             length = current_params['length'] + length
         else:

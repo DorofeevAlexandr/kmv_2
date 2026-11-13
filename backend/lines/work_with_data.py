@@ -15,7 +15,7 @@ COUNT_LINES = 90
 
 load_dotenv()
 
-VAPOR_GENERATOR_LINES = [75, 76] if os.environ.get('PLACE', 'CVT') == 'CVT' else []
+VAPOR_GENERATOR_LINES = [75, 76, 81, 82] if os.environ.get('PLACE', 'CVT') == 'CVT' else []
 
 
 def get_lines_from_base():
@@ -263,7 +263,7 @@ def fill_zero_spaces(speed_lines, line_number):
 def antialiasing_speed_value(speed_lines: list):
     non_antialiasing_lines = []
     if os.environ.get('PLACE', 'CVT') == 'CVT':
-        non_antialiasing_lines = [57 - 1, 75 - 1 , 76 - 1]
+        non_antialiasing_lines = [57 - 1, 75 - 1 , 76 - 1, 81 -1, 82 - 1]
     antialiasing_speed_value_10_minute(speed_lines, non_antialiasing_lines)
     for line_index in non_antialiasing_lines:
         fill_zero_spaces(speed_lines, line_index)
@@ -437,6 +437,8 @@ def change_title_lines_statistic(lines_statistic:list):
     change_line_stat_clear_data(lines_statistic, 57)
     change_line_stat_clear_data(lines_statistic, 75)
     change_line_stat_clear_data(lines_statistic, 76)
+    change_line_stat_clear_data(lines_statistic, 81)
+    change_line_stat_clear_data(lines_statistic, 82)
 
 
 def change_speed_lines_metr_in_second(speed_lines:list, num_lines: int):
